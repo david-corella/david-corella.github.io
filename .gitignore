@@ -4,7 +4,7 @@ dist/
 .astro/
 
 # stray root artifacts — accidental build-output redirects (real HTML lives in dist/ or as .astro),
-# curl cookie jars from probing the running Worker, and loose authoring notes. Keeps a
+# curl cookie jars from probing the running dev server, and loose authoring notes. Keeps a
 # `pnpm build > g.html` typo and a `curl -c cj.txt` session out of git.
 /*.html
 /audit-prompt.md
@@ -37,7 +37,3 @@ pnpm-debug.log*
 # claude code local state
 .claude/memory.db
 .claude/settings.local.json
-
-
-# cloudflare wrangler local state
-.wrangler/

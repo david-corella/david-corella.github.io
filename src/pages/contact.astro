@@ -3,11 +3,8 @@
 // SEO and composes the Sections/Contact blocks in the same shell as index/about (one .site-container
 // + gap rhythm).
 //
-// This is the ONE on-demand route: it receives the Resend form POST and re-renders with the result,
-// so it opts out of prerendering. Every other page stays static. See astro.config.mjs (the adapter)
-// and src/actions/index.ts.
-export const prerender = false;
-
+// Prerendered like every other route: the site is fully static and the form composes a `mailto:`
+// in the browser (see Sections/Contact/Form.astro), so there is no server route to opt out of.
 import Faq from "@components/Sections/Contact/Faq.astro";
 import Form from "@components/Sections/Contact/Form.astro";
 import Hero from "@components/Sections/Contact/Hero.astro";

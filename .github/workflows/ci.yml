@@ -4,10 +4,9 @@
 # CI on day one. The four commands are deliberately the same four the README and AGENTS.md name —
 # if they ever diverge, the docs are wrong, not this file.
 #
-# No SITE_URL is set here on purpose: the production gate in astro.config.mjs only fires for a real
-# production deploy (Netlify's CONTEXT, Vercel's VERCEL_ENV, or DEPLOY_ENV), so CI builds on the
-# placeholder exactly as a local `pnpm build` does. Setting a fake domain here would prove nothing
-# and would hide the gate.
+# No SITE_URL is set here on purpose: astro.config.mjs falls back to the site's GitHub Pages origin,
+# so CI builds exactly as a local `pnpm build` does. The deploy workflow publishes that same static
+# build to GitHub Pages.
 name: CI
 
 on:

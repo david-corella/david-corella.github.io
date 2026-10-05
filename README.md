@@ -2,7 +2,7 @@
 
 ![The 8-BitQuest home, blog post and about pages](.github/preview.png)
 
-**[Live demo → 8-bitquest.domidex01.workers.dev](https://8-bitquest.domidex01.workers.dev/)**
+**[Live site → david-corella.github.io](https://david-corella.github.io/)**
 
 A **retro 8-bit, pixel-art developer-portfolio theme** built on **Astro 7 + Tailwind CSS v4 +
 TypeScript (strict)**, with a CSS-first token architecture, typed config-driven content, and an
@@ -10,9 +10,10 @@ in-house UI, motion, icon and SEO stack. Headings are Press Start 2P on a black-
 panel" surface; every colour flows through a semantic token layer, so the committed light and dark
 themes flip for free.
 
-It ships as a **working site, not an empty skeleton** — a Home, About, Blog, Projects and a
-server-rendered Contact page, six sample posts and six sample projects, all reproduced from the
-source Figma. The one non-static route is `/contact/`, which posts to a Resend-backed Astro action.
+It ships as a **working site, not an empty skeleton** — a Home, About, Blog, Projects and a Contact
+page, six sample posts and six sample projects, all reproduced from the source Figma. The site is
+fully static: every route prerenders to HTML, and the contact form composes a `mailto:` in the
+browser (no server, no mail keys).
 
 ## Quick start
 
@@ -21,9 +22,9 @@ pnpm install
 pnpm dev          # http://localhost:4321
 ```
 
-It runs with no configuration and no keys — the contact form accepts a submission and then reports a
-send failure until you add its Resend keys (see [Contact form](#contact-form)). Fill in `src/config/`, swap the sample
-content for your own, then work through [Before you deploy](#before-you-deploy).
+It runs with no configuration and no keys — the contact form needs none at all (see
+[Contact form](#contact-form)). Fill in `src/config/`, swap the sample content for your own, then
+work through [Before you deploy](#before-you-deploy).
 
 ## Commands
 
@@ -31,9 +32,8 @@ content for your own, then work through [Before you deploy](#before-you-deploy).
 | :------------- | :------------------------------------------------------ |
 | `pnpm install` | Install dependencies                                    |
 | `pnpm dev`     | Dev server at `localhost:4321`                          |
-| `pnpm build`   | Production build to `dist/` (static pages + the Worker) |
-| `pnpm preview` | `wrangler dev` — run the production Worker locally      |
-| `pnpm deploy`  | `astro build && wrangler deploy` to Cloudflare          |
+| `pnpm build`   | Production build to `dist/` (fully static)             |
+| `pnpm preview` | `astro preview` — serve the built `dist/` locally      |
 | `pnpm check`   | Type-check `.astro` / `.ts` (`astro check`)             |
 | `pnpm lint`    | ESLint                                                  |
 | `pnpm format`  | `eslint --fix`, then Prettier                           |
@@ -49,14 +49,13 @@ content for your own, then work through [Before you deploy](#before-you-deploy).
 | `/blog/<slug>/`        | `pages/blog/[slug].astro`            | `Sections/Blog/BlogArticle` (per post) |
 | `/projects/`           | `pages/projects/index.astro`         | `Sections/Project/*` (listing)         |
 | `/projects/<slug>/`    | `pages/projects/[slug].astro`        | `Sections/Project/ProjectArticle`      |
-| `/contact/`            | `pages/contact.astro` (**SSR**)      | `Sections/Contact/*` + a Resend action |
+| `/contact/`            | `pages/contact.astro`                | `Sections/Contact/*` + a `mailto:` form |
 | `/privacy/`, `/terms/` | `pages/privacy.astro`, `terms.astro` | `config/legalData.json.ts`             |
 | `/404`                 | `pages/404.astro`                    | `Sections/NotFound/*`                  |
 | `/examples/ui`         | `pages/examples/[catalog].astro`     | `Sections/UiCatalog/*` (dev-only)      |
 
-Every route prerenders to static HTML **except `/contact/`**, which sets `export const prerender =
-false` so it can take the form POST and re-render with the result. `/examples/ui` is a `noindex`
-dev-only catalog: it is excluded from the sitemap and emits no HTML in a production build.
+Every route prerenders to static HTML. `/examples/ui` is a `noindex` dev-only catalog: it is excluded
+from the sitemap and emits no HTML in a production build.
 
 Generated endpoints: `/robots.txt`, `/llms.txt`, `/rss.xml`, `/sitemap-index.xml`. The first three
 are hand-owned dynamic routes whose absolute URLs derive from `site`, so setting that once fixes them
@@ -127,40 +126,21 @@ the `ui/pixel-panel` primitive; the shadow colour is itself a theme-aware token 
   `@js/schema`, and dynamic `robots.txt` / `llms.txt` / `rss.xml`. No SEO package.
 
 The owned motion, icon and SEO layers add **no runtime dependencies**. The primitives use
-`tailwind-variants` + `tailwind-merge`; SSR uses `@astrojs/cloudflare`; content uses `@astrojs/mdx`;
-the two fonts are self-hosted via `@fontsource`.
+`tailwind-variants` + `tailwind-merge`; content uses `@astrojs/mdx`; the two fonts are self-hosted
+via `@fontsource`. The output is fully static — there is no adapter.
 
 ## Contact form
 
-`/contact/` is the one server-driven page. A native `<form method="POST">` binds to an Astro action
-(`src/actions/index.ts`), so it works with JavaScript disabled: the server re-validates with
-`contactSchema`, runs two spam gates (a honeypot and a submit-time gate), and sends the mail with a
-plain `fetch` to the Resend API — no SDK, no dependency, a 10-second timeout. Provider errors are
-logged server-side and never shown to the visitor.
+`/contact/` is a static page. Its form does not post to a backend: a small bundled script composes a
+`mailto:` URL from the field values and hands it to the visitor's mail client, so the page works on
+any static host (this site runs on GitHub Pages) with no keys and no server. Native HTML5 validation
+(`required`, `type=email`, `minlength`/`maxlength`) checks the input first, and the destination inbox
+is `author.email` in `src/config/siteData.json.ts`.
 
-It needs two environment variables (read at **request** time, so a missing key never breaks the
-build — the form answers with its generic send-failure message, and names the missing key in the
-server log rather than to the visitor):
-
-| Variable             | Required | Purpose                                                           |
-| :------------------- | :------: | :---------------------------------------------------------------- |
-| `RESEND_API_KEY`     |   yes    | Resend API key                                                    |
-| `CONTACT_TO_EMAIL`   |   yes    | Where submissions are delivered (your inbox)                      |
-| `CONTACT_FROM_EMAIL` |    no    | From address; defaults to Resend's shared `onboarding@resend.dev` |
-
-The default sender only delivers to your own Resend account address. **To send anywhere else you must
-verify a domain in Resend** and set `CONTACT_FROM_EMAIL` to an address on it. See `.env.example`.
-
-### Demo deployments
-
-Building with `CONTACT_DEMO_MODE=true` makes the form validate, run its spam gates, and then report
-success **without sending** — so a public demo of this template needs no Resend account and no
-inbox. It is read at build time and defaults to `false`; leave it unset on a real site, or your
-contact form will quietly deliver nothing.
-
-```sh
-CONTACT_DEMO_MODE=true SITE_URL=https://your-demo.example.com pnpm build
-```
+There is no spam gate and no server-side validation, because there is no server — a `mailto:` opens
+the visitor's own mail client, which is where any abuse would land. The former Resend-backed Astro
+action and its `src/actions/` + `src/js/{contact,resend}.ts` stack were removed when the site went
+static (git history records the shape to restore them on a server host).
 
 ## Structure
 
@@ -171,10 +151,9 @@ src/
 │   ├── Cards/             content-aware card compositions (built on ui/pixel-panel)
 │   ├── ui/<name>/         the primitive library (see its README for the contract)
 │   └── svg/icons/         the <Icon> system
-├── actions/               the contact server action (Resend)
 ├── config/                typed site config — the source of truth, never literals in components
 ├── data/<collection>/     content collections, Zod-validated
-├── js/                    TypeScript utilities (schema, contact, readingTime, nav…) + their *.test.ts
+├── js/                    TypeScript utilities (schema, readingTime, nav…) + their *.test.ts
 ├── layouts/               BaseLayout + BaseHead (all meta/SEO tags live here)
 ├── pages/                 file routes — thin shells owning BaseLayout + SEO
 └── styles/                global.css entry, tailwind-theme.css tokens, motion/ catalog
@@ -186,47 +165,28 @@ Pages are thin route shells that own `BaseLayout` + SEO and compose **Sections**
 
 ## Deployment
 
-The site deploys to **Cloudflare Workers**: the build is static **except `/contact/`**, so
-`@astrojs/cloudflare` is mounted and `astro build` emits the static pages plus one Worker
-(`dist/_worker.js`) that renders the on-demand route. `wrangler.jsonc` is the Worker config — its
-`main` stays the adapter's entrypoint, and the adapter injects the asset wiring and provisions its
-session KV binding on first deploy.
+The site deploys to **GitHub Pages** as a fully static build. `.github/workflows/deploy.yml` runs
+`withastro/action` to build with `pnpm build` and publish `dist/` to Pages on every push to `main`;
+there is no adapter and no Worker. `public/.nojekyll` keeps Pages from ignoring the `_astro/` assets.
 
 ```sh
-SITE_URL=https://your.domain pnpm build   # bakes canonical/OG/sitemap URLs at build time
-pnpm deploy                               # astro build && wrangler deploy (wrangler login once)
-pnpm preview                              # wrangler dev — the production Worker, locally
+SITE_URL=https://david-corella.github.io pnpm build   # bakes canonical/OG/sitemap URLs at build time
+pnpm preview                                          # serve the built dist/ locally
 ```
 
-The contact keys live in the Worker, not the build: set them once with
-`pnpm wrangler secret put RESEND_API_KEY` / `CONTACT_TO_EMAIL` (and `CONTACT_FROM_EMAIL` for a
-verified domain). Locally, `.env` keeps working for `pnpm dev`.
+`site` in `astro.config.mjs` defaults to `https://david-corella.github.io`; set `SITE_URL` to
+override it. See `.env.example`.
 
-**To change hosts**, swap the adapter in `astro.config.mjs` for `@astrojs/node`, `@astrojs/netlify`
-or `@astrojs/vercel` (a two-line change; nothing else knows which adapter is mounted — the contact
-keys read through `astro:env`, which every adapter serves). **To go fully static**, remove the
-contact form (or its `prerender = false`) and drop the adapter — then any static host serves `dist/`.
-
-**One known cost of the mixed build:** because `/contact/` is on-demand, the build emits the shared
-stylesheet twice — `_astro/BaseLayout.<hash>.css` and a byte-identical `_astro/contact.<hash>.css`
-(84,211 B, ~14.7 KB gzip each) — so a visitor who navigates from any static page to `/contact/`
-downloads it again. It is an artifact of mixing prerendered and on-demand routes, not a
-misconfiguration: setting `prerender = true` on the contact route collapses the two into one file,
-verified. Going fully static (above) removes it; otherwise it is the price of the server-rendered
-form, and the second copy is cached from then on.
-
-Required environment variables at **build** time: **`SITE_URL`** (your production domain — feeds
-canonical, OG, JSON-LD, sitemap, `robots.txt`, `llms.txt`; a production deploy throws on the
-`example.com` placeholder — set `DEPLOY_ENV=production` in your CI build env to arm that guard).
-See `.env.example`.
+**To move to a server host** — to bring back a server-side contact form, for example — add an
+adapter (`@astrojs/node`, `@astrojs/netlify`, `@astrojs/vercel` or `@astrojs/cloudflare`) and set the
+contact page back to `prerender = false`. Nothing else knows which host serves the build.
 
 ## Before you deploy
 
-1. **`SITE_URL`** — your production domain, in the host's environment variables. A **production**
-   deploy fails if it is missing or still `example.com`; local builds and deploy previews are
-   unaffected.
-2. **Contact keys** — `RESEND_API_KEY` and `CONTACT_TO_EMAIL` (and, to send beyond your own inbox, a
-   verified domain + `CONTACT_FROM_EMAIL`).
+1. **`SITE_URL`** — your production domain, in the build environment. It defaults to
+   `https://david-corella.github.io`; set it if the domain changes.
+2. **Contact inbox** — `author.email` in `src/config/siteData.json.ts` is where the form's
+   `mailto:` is addressed.
 3. **`public/og.jpg`** — replace the placeholder with a real 1200×630 social image.
 4. **`src/config/*`** — `siteData`, `portfolioData`, and the `legalData` terms/privacy copy (the last
    is placeholder text, not legal advice — have it reviewed). In `siteData`, **fill `sameAs`**: until

@@ -9,7 +9,7 @@ import { type NavItemProps } from "./types/configDataTypes";
  *
  * Order: ABOUT · PROJECTS · BLOG · CONTACT. Home is intentionally not a nav item — the brand wordmark
  * (Header.astro `<a href="/">`) is the home link, the common logo-as-home pattern. All four routes are
- * live (`/contact/` is the one SSR page). Four Press Start labels fit the desktop bar at `lg` (measured).
+ * live (the site is fully static). Four Press Start labels fit the desktop bar at `lg` (measured).
  */
 export const navItems = [
   { label: "About", href: "/about/" },

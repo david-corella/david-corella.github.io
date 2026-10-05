@@ -9,9 +9,8 @@ CSS-first token architecture. Single-language. Package manager: **pnpm**.
 | :------------- | :---------------------------------------- |
 | `pnpm install` | Install dependencies                      |
 | `pnpm dev`     | Dev server at `localhost:4321`            |
-| `pnpm build`   | Production build to `dist/`               |
-| `pnpm preview` | `wrangler dev` — the built Worker locally |
-| `pnpm deploy`  | `astro build && wrangler deploy`          |
+| `pnpm build`   | Production build to `dist/` (static)      |
+| `pnpm preview` | `astro preview` — serve the built `dist/` |
 | `pnpm lint`    | ESLint                                    |
 | `pnpm format`  | `eslint --fix` then Prettier              |
 | `pnpm check`   | `astro check` (type `.astro`/`.ts`)       |
@@ -61,14 +60,14 @@ src/
 
 ## Don't / gotchas
 
-- **Set `SITE_URL` in the build environment** before a production deploy — `astro.config.mjs` falls
-  back to the `https://example.com` placeholder, which feeds the sitemap and the canonical/OG URLs in
-  `BaseHead.astro`. A production build (`DEPLOY_ENV=production`) throws on the placeholder.
-- **Hosting is Cloudflare Workers** (`@astrojs/cloudflare` + `wrangler.jsonc`). The wrangler `main`
-  must stay `@astrojs/cloudflare/entrypoints/server` — never a `dist/` path (it breaks `astro
-check`). Server secrets (the Resend keys) go through the `astro:env` schema in `astro.config.mjs`,
-  NOT `import.meta.env` — Workers runtime secrets never reach `import.meta.env`. Set them with
-  `pnpm wrangler secret put <NAME>`; local dev reads `.env` as usual.
+- **`SITE_URL` feeds every absolute URL** (canonical, OG, JSON-LD, the sitemap, `robots.txt`,
+  `llms.txt`). `astro.config.mjs` defaults it to `https://david-corella.github.io`; set `SITE_URL` to
+  override it in the build environment.
+- **The build is fully static and hosted on GitHub Pages.** There is **no adapter, no Worker and no
+  server route** — don't add one for a small change. `.github/workflows/deploy.yml` publishes `dist/`
+  via `withastro/action`. The contact form is client-side (a `mailto:` in
+  `Sections/Contact/Form.astro`); there are no mail keys. If a change genuinely needs server code, add
+  an adapter and set the route back to `prerender = false`.
 - **`vite.build.assetsInlineLimit: 0`** is intentional — inlined short scripts break under
   `<ClientRouter />` view transitions. Leave it at 0.
 - **Theme is set pre-paint** by an inline script in `BaseHead` (follows the device
@@ -97,9 +96,6 @@ check`). Server secrets (the Resend keys) go through the `astro:env` schema in `
   `rm -rf .astro`, so removing a collection entry and rebuilding fails with
   `UnknownContentCollectionError` naming the file you just deleted. Clear both:
   `rm -rf node_modules/.astro .astro dist`. See `src/data/README.md`.
-- **`/contact/` being on-demand duplicates the stylesheet.** The build emits `BaseLayout.<hash>.css`
-  and a byte-identical `contact.<hash>.css`. It is an adapter artifact of mixing prerendered and
-  on-demand routes (prerendering the route collapses them — verified), not something to fix in config.
 
 ## Verification
 

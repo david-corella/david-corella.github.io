@@ -28,9 +28,8 @@ const copyright = `© ${year} — Game Over`;
 // pixel-icon registry. Which platforms appear is this section's call; how one resolves is not.
 type SocialLink = { name: PixelIconName; label: string; href: string; external?: boolean };
 const socialLinks: readonly SocialLink[] = [
-  { ...socialLink("linkedin"), external: true },
+  { ...socialLink("github"), external: true },
   { name: "rss", label: "RSS feed", href: "/rss.xml" },
-  { ...socialLink("youtube"), external: true },
   { name: "email", label: "Email", href: `mailto:${siteData.author.email}` },
 ];
 
