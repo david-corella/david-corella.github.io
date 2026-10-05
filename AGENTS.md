@@ -51,6 +51,31 @@ src/
 - Path aliases (`@config/* @js/* @layouts/* @components/* @assets/* @images/* @/*`) come from
   `tsconfig.json` `paths` — prefer them over deep relative imports.
 
+## i18n (es/en)
+
+The site is bilingual: **Spanish is the default** at the root (`/about/`); English is prefixed
+(`/en/about/`). Routing comes from the Astro `i18n` block in `astro.config.mjs`
+(`prefixDefaultLocale: false`); the rest is ours:
+
+- `@js/i18n` — `getLangFromUrl(url)`, `localizePath(path, lang)`, `switchLocalePath`, `languages`,
+  `defaultLang`, `type Lang`. Framework-free.
+- `@js/ui` — the shared chrome dictionary (`useTranslations(lang)` → `t(key)`): nav, header, footer,
+  theme toggle, 404, language switcher.
+- `@config/i18n` — `getSiteData/getPortfolioData/getNavItems/getLegalData(lang)` + `localeMeta(lang)`
+  (html lang / og:locale / Intl tag). The data lives in `src/config/locales/<lang>.ts`.
+- **Section copy is a local `copy = { es: {...}, en: {...} }[lang]`** at the top of each Section —
+  never a bare literal, never in the shared dictionary (house rule).
+- **Content collections are locale-scoped**: `src/data/<collection>/<lang>/<slug>/`. Query with
+  `getSortedProjects(lang)` / `getSortedPosts(lang)` (filter by the id's `<lang>/` prefix); the slug
+  is the last id segment. Images are referenced relative to the entry (`thumbnail: "../../../../assets/..."`).
+- **Pages**: the Spanish route files in `src/pages/` read the locale from the URL, so the `/en/`
+  mirrors in `src/pages/en/` are near-identical copies. The `[slug].astro` files are the exception —
+  each hardcodes its `locale`, and `getStaticPaths` **inlines the literal** (an outer const is not in
+  scope when Astro extracts that function).
+- `BaseHead` emits `hreflang` alternates + `x-default`; `LanguageSwitcher` swaps the current path.
+
+When you add user-facing text, translate **both** locales.
+
 ## Stack defaults
 
 - **TypeScript** strict; validate external data at the boundary (Zod).

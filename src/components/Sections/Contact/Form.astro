@@ -14,27 +14,46 @@ import { Input } from "@components/ui/input";
 import { Label } from "@components/ui/label";
 import { PixelPanel } from "@components/ui/pixel-panel";
 import { Textarea } from "@components/ui/textarea";
-import siteData from "@config/siteData.json";
+import { getSiteData } from "@config/i18n";
+import { getLangFromUrl } from "@js/i18n";
+
+const lang = getLangFromUrl(Astro.url);
+const siteData = getSiteData(lang);
 
 // Where the composed mail is addressed, and the brand used in the subject line. Static (build-time)
 // values, surfaced to the script through data-* attributes so the script stays bundled, not inlined.
 const contactTo = siteData.author.email;
 const brand = siteData.name;
 
-const FIELDS = [
-  {
-    name: "name",
-    label: "Your Name",
-    placeholder: "e.g. PLAYER ONE",
-    as: "input",
-    type: "text",
-    autocomplete: "name",
-    maxlength: 100,
+const copy = {
+  es: {
+    title: "Enviar Mensaje",
+    successBadge: "Transmisión Encolada",
+    successBody:
+      "Tu cliente de correo debería estar abierto con el mensaje pre-rellenado — solo pulsa enviar.",
+    submit: "Enviar Mensaje",
+    name: { label: "Tu Nombre", placeholder: "p. ej. JUGADOR UNO" },
+    email: { label: "Correo Electrónico", placeholder: "p. ej. JUGADOR1@EJEMPLO.COM" },
+    subject: { label: "Asunto", placeholder: "p. ej. CONSULTA DE TUTORIAL" },
+    message: { label: "Transmisión de Mensaje", placeholder: "ESCRIBE TU TRANSMISIÓN AQUÍ..." },
   },
+  en: {
+    title: "Send Message",
+    successBadge: "Transmission Queued",
+    successBody: "Your mail app should now be open with the message pre-filled — just hit send.",
+    submit: "Send Message",
+    name: { label: "Your Name", placeholder: "e.g. PLAYER ONE" },
+    email: { label: "Email Address", placeholder: "e.g. PLAYER1@EXAMPLE.COM" },
+    subject: { label: "Subject", placeholder: "e.g. TUTORIAL INQUIRY" },
+    message: { label: "Message Transmission", placeholder: "TYPE YOUR TRANSMISSION HERE..." },
+  },
+}[lang];
+
+const FIELDS = [
+  { name: "name", ...copy.name, as: "input", type: "text", autocomplete: "name", maxlength: 100 },
   {
     name: "email",
-    label: "Email Address",
-    placeholder: "e.g. PLAYER1@EXAMPLE.COM",
+    ...copy.email,
     as: "input",
     type: "email",
     autocomplete: "email",
@@ -42,21 +61,13 @@ const FIELDS = [
   },
   {
     name: "subject",
-    label: "Subject",
-    placeholder: "e.g. TUTORIAL INQUIRY",
+    ...copy.subject,
     as: "input",
     type: "text",
     autocomplete: "off",
     maxlength: 150,
   },
-  {
-    name: "message",
-    label: "Message Transmission",
-    placeholder: "TYPE YOUR TRANSMISSION HERE...",
-    as: "textarea",
-    autocomplete: "off",
-    maxlength: 5000,
-  },
+  { name: "message", ...copy.message, as: "textarea", autocomplete: "off", maxlength: 5000 },
 ] as const;
 
 // SHAPE only: the pixel field surface + focus/invalid rings. No border colour.
@@ -68,7 +79,7 @@ const fieldClass = [
 
 <PixelPanel elevated class="flex flex-col gap-6 p-6 sm:p-8">
   <h2 class="text-secondary-700 dark:text-secondary font-display text-base uppercase sm:text-lg">
-    Send Message
+    {copy.title}
   </h2>
 
   <div
@@ -79,10 +90,10 @@ const fieldClass = [
     class="flex flex-col items-start gap-3"
   >
     <Badge pixel variant="success">
-      Transmission Queued
+      {copy.successBadge}
     </Badge>
     <p class="text-muted-foreground text-sm">
-      Your mail app should now be open with the message pre-filled — just hit send.
+      {copy.successBody}
     </p>
   </div>
 
@@ -129,7 +140,7 @@ const fieldClass = [
       type="submit"
       class="pixel-btn pixel-btn--green mt-2 self-start px-6 py-3 text-sm uppercase sm:text-base"
     >
-      Send Message
+      {copy.submit}
     </button>
   </form>
 </PixelPanel>

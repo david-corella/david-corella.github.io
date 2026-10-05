@@ -13,6 +13,8 @@
 import { Badge } from "@components/ui/badge";
 import { PixelPanel } from "@components/ui/pixel-panel";
 
+// i18n: this shared shell holds no copy of its own — tagline, heading and intro arrive via props
+// already resolved for the active locale by the calling section, so it stays locale-neutral.
 interface Props {
   /** the bracketed retro tag rendered in the pixel Badge (e.g. "Player 1", "Mission Control"). */
   tagline: string;

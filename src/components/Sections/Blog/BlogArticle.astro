@@ -19,7 +19,10 @@ import {
   BreadcrumbSeparator,
 } from "@components/ui/breadcrumb";
 import { PixelPanel } from "@components/ui/pixel-panel";
+import { localeMeta } from "@config/i18n";
+import { getLangFromUrl, localizePath } from "@js/i18n";
 import { type AdjacentLink, categoryMeta } from "@js/postCards";
+import { formatDate } from "@js/textUtils";
 import type { CollectionEntry } from "astro:content";
 
 interface Props {
@@ -33,8 +36,25 @@ interface Props {
   prev?: AdjacentLink;
   next?: AdjacentLink;
 }
-const { post, author, dateLabel, dateISO, readMinutes, prev, next } = Astro.props as Props;
+const { post, author, dateISO, readMinutes, prev, next } = Astro.props as Props;
 const { title, category, heroImage, heroImageAlt, tags } = post;
+
+const lang = getLangFromUrl(Astro.url);
+
+// Format here (not in the route) so the retro date follows the active locale.
+const dateLabel = formatDate(dateISO, localeMeta(lang).intlLocale).toUpperCase();
+
+const copy = {
+  es: {
+    home: "Inicio",
+    blog: "Blog",
+    minRead: "Min de lectura",
+    by: "Por",
+    prev: "Anterior",
+    next: "Siguiente",
+  },
+  en: { home: "Home", blog: "Blog", minRead: "Min Read", by: "By", prev: "Prev", next: "Next" },
+}[lang];
 
 const {
   label: categoryLabel,
@@ -46,9 +66,14 @@ const {
 <div class="flex flex-col gap-8">
   <!-- Breadcrumbs (node 5:130) -->
   <Breadcrumb>
-    <BreadcrumbItem><BreadcrumbLink href="/">Home</BreadcrumbLink></BreadcrumbItem>
+    <BreadcrumbItem
+      ><BreadcrumbLink href={localizePath("/", lang)}>{copy.home}</BreadcrumbLink></BreadcrumbItem
+    >
     <BreadcrumbSeparator />
-    <BreadcrumbItem><BreadcrumbLink href="/blog/">Blog</BreadcrumbLink></BreadcrumbItem>
+    <BreadcrumbItem
+      ><BreadcrumbLink href={localizePath("/blog/", lang)}>{copy.blog}</BreadcrumbLink
+      ></BreadcrumbItem
+    >
     <BreadcrumbSeparator />
     <BreadcrumbItem><BreadcrumbPage>{title}</BreadcrumbPage></BreadcrumbItem>
   </Breadcrumb>
@@ -79,7 +104,8 @@ const {
           )
         }
         <p class="text-muted-foreground text-xs font-bold tracking-wide uppercase">
-          <time datetime={dateISO}>{dateLabel}</time> · {readMinutes} Min Read · By {author.name}
+          <time datetime={dateISO}>{dateLabel}</time> · {readMinutes} {copy.minRead} · {copy.by} {" "}
+          {author.name}
         </p>
       </div>
     </header>
@@ -121,23 +147,23 @@ const {
         {
           prev && (
             <a
-              href={prev.href}
+              href={localizePath(prev.href, lang)}
               rel="prev"
               class="primary-focus text-info hover:text-success inline-flex items-center gap-1.5 text-xs font-bold tracking-wide uppercase transition-colors"
             >
               <PixelIcon name="arrow-left" class="size-3.5" />
-              Prev
+              {copy.prev}
             </a>
           )
         }
         {
           next && (
             <a
-              href={next.href}
+              href={localizePath(next.href, lang)}
               rel="next"
               class="primary-focus text-info hover:text-success inline-flex items-center gap-1.5 text-xs font-bold tracking-wide uppercase transition-colors"
             >
-              Next
+              {copy.next}
               <PixelIcon name="arrow-right" class="size-3.5" />
             </a>
           )

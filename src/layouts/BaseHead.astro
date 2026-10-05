@@ -4,10 +4,11 @@
  * and the view-transitions router. Native tags only — no SEO dependency.
  * SEO is owned, not vendored — see AGENTS.md.
  */
-import siteData from "@config/siteData.json";
-import { siteLocale, siteSettings } from "@config/siteSettings.json";
+import { getSiteData, localeMeta } from "@config/i18n";
+import { siteSettings } from "@config/siteSettings.json";
 import pressStart2p from "@fontsource/press-start-2p/files/press-start-2p-latin-400-normal.woff2";
 import spaceMono from "@fontsource/space-mono/files/space-mono-latin-400-normal.woff2";
+import { defaultLang, getLangFromUrl, type Lang,locales, switchLocalePath } from "@js/i18n";
 import { getSiteSchema, type SeoProps, serializeJsonLd } from "@js/schema";
 import { ClientRouter } from "astro:transitions";
 
@@ -20,6 +21,16 @@ interface Props extends SeoProps {
 
 const { title, description, image, noindex = false, schema, article } = Astro.props as Props;
 
+const lang: Lang = getLangFromUrl(Astro.url);
+const siteData = getSiteData(lang);
+const { ogLocale, intlLocale } = localeMeta(lang);
+
+// hreflang alternates (one per locale) + x-default, rewritten from the current path
+const alternates = locales.map((l) => ({
+  lang: l,
+  href: new URL(switchLocalePath(Astro.url.pathname, l), Astro.site).href,
+}));
+
 // resolve canonical + social image to absolute URLs (Astro.site is set in astro.config.mjs)
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 const socialImage = new URL(image?.src ?? siteData.defaultImage.src, Astro.site);
@@ -28,16 +39,13 @@ const imageAlt = image ? title : siteData.defaultImage.alt;
 const imageWidth = image?.width ?? 1200;
 const imageHeight = image?.height ?? 630;
 
-// OG locale wants `language_TERRITORY` (underscore); siteLocale holds BCP-47 (`en-US`)
-const ogLocale = siteLocale.replace("-", "_");
-
 // Structured data: a site-level graph (Organization + WebSite) on every page, plus any
 // page-specific nodes (Article, BreadcrumbList) passed via `schema`. See @js/schema.
 const siteNodes = getSiteSchema({
   name: siteData.name,
   url: canonicalURL.href,
   description: siteData.description,
-  inLanguage: siteLocale,
+  inLanguage: intlLocale,
   // ponytail: placeholder logo = the default OG image; swap for a real brand logo before deploy.
   logo: new URL(siteData.defaultImage.src, canonicalURL).href,
   sameAs: siteData.sameAs,
@@ -69,6 +77,16 @@ const jsonLd = serializeJsonLd([...siteNodes, ...(schema ?? [])]);
 <title>{title}</title>
 <meta name="description" content={description} />
 <link rel="canonical" href={canonicalURL} />
+{
+  alternates.map((alt) => (
+    <link rel="alternate" hreflang={alt.lang} href={alt.href} />
+  ))
+}
+<link
+  rel="alternate"
+  hreflang="x-default"
+  href={alternates.find((alt) => alt.lang === defaultLang)?.href}
+/>
 {noindex && <meta name="robots" content="noindex, nofollow" />}
 
 <!-- Open Graph -->
@@ -78,6 +96,13 @@ const jsonLd = serializeJsonLd([...siteNodes, ...(schema ?? [])]);
 <meta property="og:url" content={canonicalURL} />
 <meta property="og:site_name" content={siteData.name} />
 <meta property="og:locale" content={ogLocale} />
+{
+  locales
+    .filter((l) => l !== lang)
+    .map((l) => (
+      <meta property="og:locale:alternate" content={localeMeta(l).ogLocale} />
+    ))
+}
 <meta property="og:image" content={socialImage} />
 <meta property="og:image:alt" content={imageAlt} />
 <meta property="og:image:width" content={`${imageWidth}`} />

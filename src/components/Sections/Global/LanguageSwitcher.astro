@@ -1,0 +1,26 @@
+---
+// src/components/Sections/Global/LanguageSwitcher.astro — the header's locale toggle.
+//
+// One link to the *other* locale, rewritten from the current path (same route, other language) via
+// `switchLocalePath`. Styled as the retro pink `.pixel-btn`, like the MENU button. `hreflang` names
+// the destination language; the visible code (ES / EN) is the target, so a reader on /en/ sees "ES".
+import { defaultLang, getLangFromUrl, type Lang,languages, switchLocalePath } from "@js/i18n";
+import { useTranslations } from "@js/ui";
+
+const current = getLangFromUrl(Astro.url);
+const target =
+  (Object.keys(languages) as Lang[]).find((locale) => locale !== current) ?? defaultLang;
+const href = switchLocalePath(Astro.url.pathname, target);
+const t = useTranslations(current);
+---
+
+<a
+  href={href}
+  hreflang={target}
+  rel="alternate"
+  aria-label={t("lang.switch")}
+  data-slot="language-switcher"
+  class="pixel-btn h-9 shrink-0 px-3 text-[10px] leading-none uppercase"
+>
+  {target.toUpperCase()}
+</a>

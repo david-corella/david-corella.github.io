@@ -1,22 +1,16 @@
 import type { PixelIconName } from "@components/svg/pixel-icons";
+import type { Lang } from "@js/i18n";
 import { socialUrl } from "@js/social";
 
-import siteData from "./siteData.json";
+import { getSiteData } from "./i18n";
 import { type SocialPlatformProps } from "./types/configDataTypes";
 
 /**
- * * Social platforms — one definition per platform, resolved against `siteData.sameAs`.
- *
- * Previously the footer, the home Contact section and the contact InfoCards each carried their own
- * platform list, so a platform's label, glyph and URL derivation existed in three places and a change
- * to any of them was a three-file edit. They live here now; a section still chooses WHICH platforms it
- * shows (that is genuinely per-section), but never how one resolves.
+ * * Social platforms — one definition per platform, resolved against the locale's `siteData.sameAs`.
  *
  * `match` is the host substring(s) that identify the platform inside `sameAs`; `fallback` is where the
- * link points when `sameAs` has no match. **A buyer who leaves `sameAs` empty gets the fallbacks —
- * bare platform home pages, not profiles.** That is deliberate (a dead link to your own handle is
- * worse than a link to the platform), but it means filling `sameAs` is a launch task, not a nicety.
- * See the README's "Before you deploy".
+ * link points when `sameAs` has no match (a bare platform home page, never a dead personal profile).
+ * The labels are proper nouns and read the same in both locales.
  */
 export const socialPlatforms = {
   github: {
@@ -31,7 +25,6 @@ export const socialPlatforms = {
     match: "linkedin.com",
     fallback: "https://www.linkedin.com/",
   },
-  // `author.twitter` wins when set, because a handle is more specific than a sameAs host match.
   twitter: {
     label: "Twitter/X",
     icon: "twitter",
@@ -44,7 +37,6 @@ export const socialPlatforms = {
     match: "youtube.com",
     fallback: "https://www.youtube.com/",
   },
-  // No pixel glyph in the 18-icon set — used by InfoCards, which renders text values, not icons.
   discord: {
     label: "Discord",
     match: ["discord.gg", "discord.com"],
@@ -60,15 +52,11 @@ export type IconSocialPlatform = {
 }[SocialPlatform];
 
 /**
- * * Resolve a platform's destination URL.
- *
- * The one derivation every section shares: the first matching `sameAs` entry, else the platform's
- * fallback. Twitter/X additionally prefers `siteData.author.twitter` when the buyer set a handle.
- *
- * @param platform a key of `socialPlatforms`
- * @returns an absolute URL, never empty
+ * Resolve a platform's destination URL for a locale. Twitter/X additionally prefers
+ * `siteData.author.twitter` when set, because a handle is more specific than a sameAs host match.
  */
-export function socialHref(platform: SocialPlatform): string {
+export function socialHref(platform: SocialPlatform, lang: Lang): string {
+  const siteData = getSiteData(lang);
   const { match, fallback } = socialPlatforms[platform];
   if (platform === "twitter" && siteData.author.twitter) {
     return `https://x.com/${siteData.author.twitter}`;
@@ -77,11 +65,14 @@ export function socialHref(platform: SocialPlatform): string {
 }
 
 /** A platform's label + glyph + resolved href — the shape the footer row and home chips render. */
-export function socialLink(platform: IconSocialPlatform): {
+export function socialLink(
+  platform: IconSocialPlatform,
+  lang: Lang,
+): {
   name: PixelIconName;
   label: string;
   href: string;
 } {
   const { label, icon } = socialPlatforms[platform];
-  return { name: icon, label, href: socialHref(platform) };
+  return { name: icon, label, href: socialHref(platform, lang) };
 }

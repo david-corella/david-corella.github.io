@@ -10,13 +10,31 @@
 // the labels + value colours stay here (presentational). Avatar is a demo asset (plain <img>, no Sharp).
 import SectionHeading from "@components/Sections/Global/SectionHeading.astro";
 import { PixelPanel } from "@components/ui/pixel-panel";
-import portfolioData from "@config/portfolioData.json";
+import { getPortfolioData } from "@config/i18n";
 import avatar from "@images/about-avatar.png";
+import { getLangFromUrl } from "@js/i18n";
 
-const { role, years, skills } = portfolioData.profile;
+const lang = getLangFromUrl(Astro.url);
+const { role, years, skills } = getPortfolioData(lang).profile;
+
+// Bilingual presentational copy (labels + alt) — the values come from portfolioData.
+const copy = {
+  es: {
+    heading: "Perfil Dev",
+    role: "Rol",
+    years: "Años",
+    alt: "Retrato pixel-art del autor del sitio",
+  },
+  en: {
+    heading: "Dev Profile",
+    role: "Role",
+    years: "Yrs",
+    alt: "Pixel-art portrait of the site author",
+  },
+}[lang];
 const specs = [
-  { label: "Role", value: role, valueClass: "text-foreground" },
-  { label: "Yrs", value: years, valueClass: "text-success" },
+  { label: copy.role, value: role, valueClass: "text-foreground" },
+  { label: copy.years, value: years, valueClass: "text-success" },
 ] as const;
 
 // Skill bars: label + percentage (from portfolioData). The track is the fixed black pixel surface
@@ -26,7 +44,7 @@ const bars = skills;
 ---
 
 <section aria-labelledby="dev-profile-heading" class="flex flex-col gap-6">
-  <SectionHeading id="dev-profile-heading" title="Dev Profile" />
+  <SectionHeading id="dev-profile-heading" title={copy.heading} />
 
   <div class="flex flex-col gap-6 sm:flex-row sm:items-start">
     <div
@@ -36,7 +54,7 @@ const bars = skills;
         src={avatar.src}
         width={avatar.width}
         height={avatar.height}
-        alt="Pixel-art portrait of the site author"
+        alt={copy.alt}
         loading="eager"
         decoding="async"
         class="size-full object-cover"

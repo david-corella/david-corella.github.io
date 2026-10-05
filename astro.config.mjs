@@ -13,6 +13,15 @@ const site = process.env.SITE_URL ?? "https://david-corella.github.io";
 export default defineConfig({
   site,
 
+  // Bilingual: Spanish is the default and lives at the root (/sobre-mi/), English is prefixed
+  // (/en/about/). `prefixDefaultLocale: false` keeps the default locale unprefixed so the canonical
+  // URLs stay clean; @js/i18n derives the active locale from the URL at render time.
+  i18n: {
+    locales: ["es", "en"],
+    defaultLocale: "es",
+    routing: { prefixDefaultLocale: false },
+  },
+
   // Static output: every route prerenders to HTML and the host serves it as a static asset.
   // There is no adapter and no server route — the contact form composes a `mailto:` in the
   // browser (see src/components/Sections/Contact/Form.astro), so /contact/ prerenders like every

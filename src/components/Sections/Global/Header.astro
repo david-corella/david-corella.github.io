@@ -11,13 +11,19 @@
 // `.pixel-btn` (global.css), and ui/theme-toggle. No new primitives. The MENU / CLOSE controls are
 // worded (no icons). Content is wired from config: brand = siteData.name, links = navData.
 import HeaderNavLinks from "@components/Sections/Global/HeaderNavLinks.astro";
+import LanguageSwitcher from "@components/Sections/Global/LanguageSwitcher.astro";
 import { Nav } from "@components/ui/nav";
 import { Sheet } from "@components/ui/sheet";
 import { ThemeToggle } from "@components/ui/theme-toggle";
-import siteData from "@config/siteData.json";
+import { getSiteData } from "@config/i18n";
 import heroAvatar from "@images/hero-avatar.jpg";
+import { getLangFromUrl, localizePath } from "@js/i18n";
+import { useTranslations } from "@js/ui";
 
 const pathname = Astro.url.pathname;
+const lang = getLangFromUrl(Astro.url);
+const siteData = getSiteData(lang);
+const t = useTranslations(lang);
 ---
 
 <header
@@ -31,9 +37,9 @@ const pathname = Astro.url.pathname;
     <!-- Brand: pixel avatar + wordmark, links home. The link's accessible name is the wordmark. On a
          narrow phone the brand (min-w-0) shrinks and the wordmark truncates before the row overflows. -->
     <a
-      href="/"
+      href={localizePath("/", lang)}
       class="primary-focus flex min-w-0 items-center gap-3 sm:gap-4"
-      aria-label={`${siteData.name} — home`}
+      aria-label={`${siteData.name} — ${t("header.home")}`}
     >
       <span
         class="bg-accent border-border flex size-9 shrink-0 items-center justify-center overflow-clip border-4 p-1 sm:size-10"
@@ -66,11 +72,12 @@ const pathname = Astro.url.pathname;
       <!-- `lg:contents` dissolves the wrapper on desktop so <Nav> flexes with its siblings; below lg
            the whole nav landmark is display:none (not just visually hidden). -->
       <div class="hidden lg:contents">
-        <Nav aria-label="Primary" class="gap-6 xl:gap-8">
+        <Nav aria-label={t("header.primary")} class="gap-6 xl:gap-8">
           <HeaderNavLinks pathname={pathname} />
         </Nav>
       </div>
 
+      <LanguageSwitcher />
       <ThemeToggle />
 
       {
@@ -84,7 +91,7 @@ const pathname = Astro.url.pathname;
         aria-controls="site-menu"
         class="pixel-btn h-9 shrink-0 px-3 text-[10px] leading-none uppercase lg:hidden"
       >
-        Menu
+        {t("header.menu")}
       </button>
     </div>
   </div>
@@ -93,17 +100,19 @@ const pathname = Astro.url.pathname;
        is the Sheet's own `_dialog` hook (Escape + backdrop dismiss are automatic). -->
   <Sheet id="site-menu" side="right" aria-labelledby="site-menu-title" class="w-72 gap-6">
     <div class="flex items-center justify-between">
-      <span id="site-menu-title" class="font-display text-foreground text-sm uppercase">Menu</span>
+      <span id="site-menu-title" class="font-display text-foreground text-sm uppercase"
+        >{t("header.menu")}</span
+      >
       <button
         type="button"
         data-dialog-close
         class="pixel-btn h-9 shrink-0 px-3 text-[10px] leading-none uppercase"
       >
-        Close
+        {t("header.close")}
       </button>
     </div>
 
-    <Nav orientation="vertical" aria-label="Primary" class="gap-2">
+    <Nav orientation="vertical" aria-label={t("header.primary")} class="gap-2">
       <HeaderNavLinks pathname={pathname} fullWidth />
     </Nav>
   </Sheet>

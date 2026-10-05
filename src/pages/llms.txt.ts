@@ -1,4 +1,4 @@
-import siteData from "@config/siteData.json";
+import { getSiteData } from "@config/i18n";
 import type { APIRoute } from "astro";
 
 /**
@@ -11,7 +11,7 @@ import type { APIRoute } from "astro";
  * an editorial content map for AI crawlers, not a ranking factor.
  */
 export const GET: APIRoute = ({ site }) => {
-  const { name, description } = siteData;
+  const { name, description } = getSiteData("es");
   const base = site ?? new URL("https://example.com/");
 
   const body = [

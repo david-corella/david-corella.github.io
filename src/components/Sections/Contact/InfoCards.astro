@@ -13,12 +13,40 @@
 import type { BadgeVariant } from "@components/ui/badge";
 import { Badge } from "@components/ui/badge";
 import { PixelPanel } from "@components/ui/pixel-panel";
-import siteData from "@config/siteData.json";
+import { getSiteData } from "@config/i18n";
 import { socialHref } from "@config/socialData.json";
+import { getLangFromUrl } from "@js/i18n";
 
+const lang = getLangFromUrl(Astro.url);
+const siteData = getSiteData(lang);
 const email = siteData.author.email;
-const github = socialHref("github");
-const discord = socialHref("discord");
+const github = socialHref("github", lang);
+const discord = socialHref("discord", lang);
+
+const copy = {
+  es: {
+    emailTag: "Correo",
+    emailTitle: "Telepatía",
+    emailBlurb: "Enlace digital directo a mi buzón",
+    discordTag: "Comunidad",
+    discordTitle: "Barra de Discord",
+    discordBlurb: "Convive con otros hackers retro",
+    githubTag: "Código",
+    githubTitle: "Hub de GitHub",
+    githubBlurb: "Explora mis repositorios de código abierto",
+  },
+  en: {
+    emailTag: "E-Mail",
+    emailTitle: "Telepathy",
+    emailBlurb: "Direct digital link to my HQ mailbox",
+    discordTag: "Community",
+    discordTitle: "Discord Bar",
+    discordBlurb: "Hang out with fellow retro hackers",
+    githubTag: "Codebase",
+    githubTitle: "GitHub Hub",
+    githubBlurb: "Inspect my open-source pipelines",
+  },
+}[lang];
 
 /** Strip scheme + trailing slash for the displayed value (the box still links to the full URL). */
 const display = (url: string): string => url.replace(/^https?:\/\//, "").replace(/\/$/, "");
@@ -32,26 +60,26 @@ const cards: readonly {
   href: string;
 }[] = [
   {
-    tag: "E-Mail",
+    tag: copy.emailTag,
     tone: "info",
-    title: "Telepathy",
-    blurb: "Direct digital link to my HQ mailbox",
+    title: copy.emailTitle,
+    blurb: copy.emailBlurb,
     value: email,
     href: `mailto:${email}`,
   },
   {
-    tag: "Community",
+    tag: copy.discordTag,
     tone: "success",
-    title: "Discord Bar",
-    blurb: "Hang out with fellow retro hackers",
+    title: copy.discordTitle,
+    blurb: copy.discordBlurb,
     value: display(discord),
     href: discord,
   },
   {
-    tag: "Codebase",
+    tag: copy.githubTag,
     tone: "secondary",
-    title: "GitHub Hub",
-    blurb: "Inspect my open-source pipelines",
+    title: copy.githubTitle,
+    blurb: copy.githubBlurb,
     value: display(github),
     href: github,
   },

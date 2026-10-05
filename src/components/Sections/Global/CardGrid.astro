@@ -13,6 +13,7 @@
 import ContentCard, { type ContentCardProps } from "@components/Cards/ContentCard.astro";
 import { PixelPanel } from "@components/ui/pixel-panel";
 import { Reveal } from "@components/ui/reveal";
+import { getLangFromUrl } from "@js/i18n";
 
 import SectionHeading from "./SectionHeading.astro";
 
@@ -23,6 +24,13 @@ interface Props {
   items: readonly ContentCardProps[];
 }
 const { headingId, title, items } = Astro.props as Props;
+
+const lang = getLangFromUrl(Astro.url);
+// Bilingual fallback copy (the `title` above arrives already localized by the caller).
+const copy = {
+  es: { empty: "Aún no hay entradas — cargando nuevas misiones." },
+  en: { empty: "No entries yet — new quests loading." },
+}[lang];
 ---
 
 <Reveal as="section" aria-labelledby={headingId} class="flex flex-col gap-6">
@@ -40,7 +48,7 @@ const { headingId, title, items } = Astro.props as Props;
     ) : (
       <PixelPanel class="p-6 text-center">
         <p class="text-muted-foreground font-display text-xs uppercase">
-          No entries yet — new quests loading.
+          {copy.empty}
         </p>
       </PixelPanel>
     )

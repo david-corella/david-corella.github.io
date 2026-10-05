@@ -12,6 +12,7 @@
 import { PixelIcon } from "@components/svg/pixel-icons";
 import { Badge } from "@components/ui/badge";
 import { PixelPanel } from "@components/ui/pixel-panel";
+import { getLangFromUrl, localizePath } from "@js/i18n";
 import { statusMeta } from "@js/projectCards";
 import type { CollectionEntry } from "astro:content";
 
@@ -22,17 +23,44 @@ const { project } = Astro.props as Props;
 const { title, tagline, status, moduleId, specs, features, archCaption, challenge, solution } =
   project;
 
-const { label: statusLabel, variant: statusVariant } = statusMeta(status);
+const lang = getLangFromUrl(Astro.url);
+const copy = {
+  es: {
+    back: "Volver al Registro de Proyectos",
+    moduleLabel: "Módulo_ID",
+    overview: "Resumen del Proyecto",
+    features: "Características del Sistema",
+    specs: "ESPECIFICACIONES",
+    archMap: "MAPA_ARQ",
+    challenges: "Retos y Soluciones",
+    statusComplete: "[Completado]",
+    statusInProgress: "[En Progreso]",
+  },
+  en: {
+    back: "Back to Project Log",
+    moduleLabel: "Module_ID",
+    overview: "Project Overview",
+    features: "System Features",
+    specs: "SYS_SPECS",
+    archMap: "ARC_MAP",
+    challenges: "Challenges & Solutions",
+    statusComplete: "[Complete]",
+    statusInProgress: "[In Progress]",
+  },
+}[lang];
+
+const { variant: statusVariant } = statusMeta(status);
+const statusLabel = status === "complete" ? copy.statusComplete : copy.statusInProgress;
 ---
 
 <div class="flex flex-col gap-8">
   <!-- Back Nav (node 72:208) -->
   <a
-    href="/projects/"
+    href={localizePath("/projects/", lang)}
     class="primary-focus text-info hover:text-success inline-flex w-fit items-center gap-2 text-xs font-bold tracking-wide uppercase transition-colors"
   >
     <PixelIcon name="arrow-left" class="size-3.5" />
-    Back to Project Log
+    {copy.back}
   </a>
 
   <!-- Hero Panel (node 72:211) -->
@@ -46,7 +74,7 @@ const { label: statusLabel, variant: statusVariant } = statusMeta(status);
       <div class="flex flex-wrap items-center justify-between gap-3">
         <Badge pixel variant={statusVariant}>{statusLabel}</Badge>
         <span class="text-muted-foreground text-xs font-bold tracking-wide uppercase">
-          Module_ID: {moduleId}
+          {copy.moduleLabel}: {moduleId}
         </span>
       </div>
 
@@ -61,7 +89,7 @@ const { label: statusLabel, variant: statusVariant } = statusMeta(status);
     <div class="flex flex-col gap-6 lg:col-span-2">
       <!-- Overview Card — heading + the rendered MDX body (node 72:220) -->
       <PixelPanel class="flex flex-col gap-4 p-6 sm:p-7">
-        <h2 class="h3 text-secondary-700 dark:text-secondary">Project Overview</h2>
+        <h2 class="h3 text-secondary-700 dark:text-secondary">{copy.overview}</h2>
         <div class="text-muted-foreground space-y-4 text-base leading-relaxed">
           <slot />
         </div>
@@ -69,7 +97,7 @@ const { label: statusLabel, variant: statusVariant } = statusMeta(status);
 
       <!-- Key Features Card (node 72:223) -->
       <PixelPanel class="flex flex-col gap-4 p-6 sm:p-7">
-        <h2 class="h3 text-secondary-700 dark:text-secondary">System Features</h2>
+        <h2 class="h3 text-secondary-700 dark:text-secondary">{copy.features}</h2>
         <ul class="flex flex-col gap-4">
           {
             features.map((feature) => (
@@ -88,7 +116,7 @@ const { label: statusLabel, variant: statusVariant } = statusMeta(status);
     <div class="flex flex-col gap-6">
       <!-- Tech Specs Card (node 72:236) — label/value grid, values in success green -->
       <PixelPanel class="flex flex-col gap-4 p-6">
-        <h2 class="font-display text-info text-xs uppercase sm:text-sm">SYS_SPECS</h2>
+        <h2 class="font-display text-info text-xs uppercase sm:text-sm">{copy.specs}</h2>
         <dl
           class="grid grid-cols-[max-content_1fr] gap-x-4 gap-y-2 text-xs font-bold uppercase sm:text-sm"
         >
@@ -106,7 +134,7 @@ const { label: statusLabel, variant: statusVariant } = statusMeta(status);
       <!-- Architecture Card (node 72:251) — a framed diagram box: a fixed decorative glyph + the
            per-project caption (which carries the differentiation). -->
       <PixelPanel class="flex flex-col gap-4 p-6">
-        <h2 class="font-display text-info text-xs uppercase sm:text-sm">ARC_MAP</h2>
+        <h2 class="font-display text-info text-xs uppercase sm:text-sm">{copy.archMap}</h2>
         <div
           class="border-border text-muted-foreground flex flex-col items-center justify-center gap-3 border-2 p-8"
         >
@@ -124,7 +152,7 @@ const { label: statusLabel, variant: statusVariant } = statusMeta(status);
     class="flex flex-col gap-6 p-6 sm:p-7"
   >
     <h2 id="challenges-heading" class="h3 text-secondary-700 dark:text-secondary">
-      Challenges &amp; Solutions
+      {copy.challenges}
     </h2>
     <div class="grid gap-6 md:grid-cols-2">
       <div class="flex flex-col gap-2">

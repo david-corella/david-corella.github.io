@@ -8,7 +8,8 @@ import "@/styles/global.css";
 
 import Footer from "@components/Sections/Global/Footer.astro";
 import Header from "@components/Sections/Global/Header.astro";
-import { siteLang } from "@config/siteSettings.json";
+import { localeMeta } from "@config/i18n";
+import { getLangFromUrl } from "@js/i18n";
 import { type SeoProps } from "@js/schema";
 import BaseHead from "@layouts/BaseHead.astro";
 
@@ -21,10 +22,12 @@ interface Props extends SeoProps {
 }
 
 const { title, description, image, noindex = false, schema, article } = Astro.props as Props;
+
+const { htmlLang } = localeMeta(getLangFromUrl(Astro.url));
 ---
 
 <!doctype html>
-<html lang={siteLang}>
+<html lang={htmlLang}>
   <head>
     <BaseHead
       title={title}

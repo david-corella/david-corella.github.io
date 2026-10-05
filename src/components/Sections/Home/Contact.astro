@@ -10,17 +10,28 @@
 // LET'S TALK → /contact/.
 import SectionHeading from "@components/Sections/Global/SectionHeading.astro";
 import { Reveal } from "@components/ui/reveal";
-import portfolioData from "@config/portfolioData.json";
-import siteData from "@config/siteData.json";
+import { getPortfolioData, getSiteData } from "@config/i18n";
 import { socialLink } from "@config/socialData.json";
+import { getLangFromUrl, localizePath } from "@js/i18n";
 
 import PixelChip from "./PixelChip.astro";
 
-const socials = [socialLink("github"), socialLink("twitter"), socialLink("linkedin")];
+const lang = getLangFromUrl(Astro.url);
+const portfolioData = getPortfolioData(lang);
+const siteData = getSiteData(lang);
+const socials = [
+  socialLink("github", lang),
+  socialLink("twitter", lang),
+  socialLink("linkedin", lang),
+];
+const copy = {
+  es: { heading: "Contacto", email: "Escríbeme", talk: "Hablemos", profile: "perfil" },
+  en: { heading: "Contact", email: "Email Me", talk: "Let's Talk", profile: "profile" },
+}[lang];
 ---
 
 <Reveal as="section" aria-labelledby="contact-heading" class="flex flex-col gap-6">
-  <SectionHeading id="contact-heading" title="Contact" />
+  <SectionHeading id="contact-heading" title={copy.heading} />
 
   <div class="flex flex-col items-center gap-6 text-center">
     <p class="text-muted-foreground max-w-2xl text-base">{portfolioData.contact.prompt}</p>
@@ -30,10 +41,13 @@ const socials = [socialLink("github"), socialLink("twitter"), socialLink("linked
         href={`mailto:${siteData.author.email}`}
         class="pixel-btn pixel-btn--blue px-5 py-4 text-sm uppercase sm:text-base"
       >
-        Email Me
+        {copy.email}
       </a>
-      <a href="/contact/" class="pixel-btn px-5 py-4 text-sm uppercase sm:text-base">
-        Let's Talk
+      <a
+        href={localizePath("/contact/", lang)}
+        class="pixel-btn px-5 py-4 text-sm uppercase sm:text-base"
+      >
+        {copy.talk}
       </a>
     </div>
 
@@ -45,7 +59,7 @@ const socials = [socialLink("github"), socialLink("twitter"), socialLink("linked
               icon={social.name}
               label={social.label}
               href={social.href}
-              ariaLabel={`${social.label} profile`}
+              ariaLabel={`${social.label} ${copy.profile}`}
               external
             />
           </li>

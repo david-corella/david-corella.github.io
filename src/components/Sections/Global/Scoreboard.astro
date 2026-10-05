@@ -15,6 +15,8 @@
 // inherited by the stat <p>s.
 import { PixelPanel } from "@components/ui/pixel-panel";
 
+// i18n: locale-neutral shell — each stat's `text` is already localized where the stats are built
+// (portfolioData.stats.*), so this component only owns the presentational seam + colours.
 interface Props {
   stats: readonly { text: string; color: string }[];
   /** Breakpoint at which the strip switches from a stacked column to a spread row. */

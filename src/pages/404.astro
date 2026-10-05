@@ -3,12 +3,16 @@
 // and the page copy, passed down so the meta tags and the visible text can't drift; the
 // markup lives in Sections/NotFound.
 import NotFound from "@components/Sections/NotFound/NotFound.astro";
-import siteData from "@config/siteData.json";
+import { getSiteData } from "@config/i18n";
+import { getLangFromUrl } from "@js/i18n";
+import { useTranslations } from "@js/ui";
 import BaseLayout from "@layouts/BaseLayout.astro";
 
-const title = "Page not found";
-const description =
-  "Sorry, the page you're looking for doesn't exist or has moved. Let's get you back on track.";
+const lang = getLangFromUrl(Astro.url);
+const siteData = getSiteData(lang);
+const t = useTranslations(lang);
+const title = t("404.title");
+const description = t("404.body");
 ---
 
 <BaseLayout title={`${title} — ${siteData.name}`} description={description} noindex={true}>

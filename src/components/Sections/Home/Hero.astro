@@ -8,16 +8,30 @@
 // Copy (tag, H1, intro) comes from portfolioData.home — the buyer-editable home introduction. The
 // READ BLOG / SAY HI CTAs point at the real /blog/ and /contact/ routes.
 import HeroPanel from "@components/Sections/Global/HeroPanel.astro";
-import portfolioData from "@config/portfolioData.json";
+import { getPortfolioData } from "@config/i18n";
+import { getLangFromUrl, localizePath } from "@js/i18n";
 
-const { tagline, heading, intro } = portfolioData.home;
+const lang = getLangFromUrl(Astro.url);
+const { tagline, heading, intro } = getPortfolioData(lang).home;
+const copy = {
+  es: { blog: "Leer blog", sayHi: "Saluda" },
+  en: { blog: "Read Blog", sayHi: "Say Hi" },
+}[lang];
 ---
 
 <HeroPanel headingId="hero-heading" tagline={tagline} heading={heading} intro={intro}>
   <div class="flex flex-col gap-4 pt-2 sm:flex-row">
-    <a href="/blog/" class="pixel-btn pixel-btn--blue px-5 py-4 text-sm uppercase sm:text-base">
-      Read Blog
+    <a
+      href={localizePath("/blog/", lang)}
+      class="pixel-btn pixel-btn--blue px-5 py-4 text-sm uppercase sm:text-base"
+    >
+      {copy.blog}
     </a>
-    <a href="/contact/" class="pixel-btn px-5 py-4 text-sm uppercase sm:text-base"> Say Hi </a>
+    <a
+      href={localizePath("/contact/", lang)}
+      class="pixel-btn px-5 py-4 text-sm uppercase sm:text-base"
+    >
+      {copy.sayHi}
+    </a>
   </div>
 </HeroPanel>

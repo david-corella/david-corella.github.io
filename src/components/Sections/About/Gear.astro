@@ -9,18 +9,51 @@
 import SectionHeading from "@components/Sections/Global/SectionHeading.astro";
 import { PixelPanel } from "@components/ui/pixel-panel";
 import { Reveal } from "@components/ui/reveal";
+import { getLangFromUrl } from "@js/i18n";
+
+const lang = getLangFromUrl(Astro.url);
+
+// Bilingual section copy — the heading and the five label/value gear rows.
+const copy = {
+  es: {
+    heading: "Equipo / Setup",
+    editor: "Editor",
+    editorValue: "VS Code",
+    terminal: "Terminal",
+    terminalValue: "Zsh + Tmux",
+    monitor: "Monitor",
+    monitorValue: "Ultra ancho 4K",
+    keyboard: "Teclado",
+    keyboardValue: "Teclado mecánico",
+    fuel: "Combustible",
+    fuelValue: "Café negro",
+  },
+  en: {
+    heading: "Setup / Gear",
+    editor: "Editor",
+    editorValue: "VS Code",
+    terminal: "Terminal",
+    terminalValue: "Zsh + Tmux",
+    monitor: "Monitor",
+    monitorValue: "Ultrawide 4K",
+    keyboard: "Keyboard",
+    keyboardValue: "Mechanical KB",
+    fuel: "Fuel",
+    fuelValue: "Black Coffee",
+  },
+}[lang];
 
 const gear = [
-  { label: "Editor", value: "VS Code" },
-  { label: "Terminal", value: "Zsh + Tmux" },
-  { label: "Monitor", value: "Ultrawide 4K" },
-  { label: "Keyboard", value: "Mechanical KB" },
-  { label: "Fuel", value: "Black Coffee" },
+  { label: copy.editor, value: copy.editorValue },
+  { label: copy.terminal, value: copy.terminalValue },
+  { label: copy.monitor, value: copy.monitorValue },
+  { label: copy.keyboard, value: copy.keyboardValue },
+  { label: copy.fuel, value: copy.fuelValue },
 ] as const;
 ---
 
 <Reveal as="section" aria-labelledby="gear-heading" class="flex flex-col gap-6">
-  <SectionHeading id="gear-heading" title="Setup / Gear" />
+  <SectionHeading id="gear-heading" title={copy.heading} />
 
   <PixelPanel as="dl" class="flex flex-col gap-3 p-5 sm:p-6">
     {

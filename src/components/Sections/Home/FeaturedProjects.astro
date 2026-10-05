@@ -7,10 +7,19 @@
 // one source — no more hand-kept demo list with slugs that 404. Each card links to its real
 // /projects/<slug>/ detail page.
 import CardGrid from "@components/Sections/Global/CardGrid.astro";
+import { getLangFromUrl } from "@js/i18n";
 import { toProjectCard } from "@js/projectCards";
 import { getSortedProjects } from "@js/projectData";
 
-const featured = (await getSortedProjects()).slice(0, 3).map(toProjectCard);
+const lang = getLangFromUrl(Astro.url);
+const copy = {
+  es: { title: "Proyectos destacados" },
+  en: { title: "Featured Projects" },
+}[lang];
+
+const featured = (await getSortedProjects(lang))
+  .slice(0, 3)
+  .map((entry) => toProjectCard(entry, lang));
 ---
 
-<CardGrid headingId="featured-projects-heading" title="Featured Projects" items={featured} />
+<CardGrid headingId="featured-projects-heading" title={copy.title} items={featured} />

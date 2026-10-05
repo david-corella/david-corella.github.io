@@ -11,8 +11,15 @@
 import SectionHeading from "@components/Sections/Global/SectionHeading.astro";
 import type { PixelIconName } from "@components/svg/pixel-icons";
 import { Reveal } from "@components/ui/reveal";
+import { getLangFromUrl } from "@js/i18n";
 
 import PixelChip from "./PixelChip.astro";
+
+const lang = getLangFromUrl(Astro.url);
+const copy = {
+  es: { title: "Tecnologías" },
+  en: { title: "Tech Stack" },
+}[lang];
 
 const stack: readonly { label: string; icon: PixelIconName }[] = [
   { label: "JavaScript", icon: "code" },
@@ -27,7 +34,7 @@ const stack: readonly { label: string; icon: PixelIconName }[] = [
 ---
 
 <Reveal as="section" aria-labelledby="tech-stack-heading" class="flex flex-col gap-6">
-  <SectionHeading id="tech-stack-heading" title="Tech Stack" />
+  <SectionHeading id="tech-stack-heading" title={copy.title} />
 
   <ul class="flex flex-wrap gap-3 sm:gap-4">
     {

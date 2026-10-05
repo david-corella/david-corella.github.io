@@ -4,11 +4,28 @@
 // a one-line archive blurb. Static page copy (not per-entry), so it takes no props. Renders the
 // shared Global/HeroPanel so it can't drift from the other page heroes. Above the fold → no <Reveal>.
 import HeroPanel from "@components/Sections/Global/HeroPanel.astro";
+import { getLangFromUrl } from "@js/i18n";
+
+const lang = getLangFromUrl(Astro.url);
+const copy = {
+  es: {
+    tagline: "Archivo de Misiones",
+    heading: "Registro de Proyectos",
+    intro:
+      "Archivo de misiones — todas las operaciones de desarrollo, pipelines full-stack y prototipos de terminal vintage, catalogados y documentados a fondo. Pulsa ver para inspeccionar los módulos fuente.",
+  },
+  en: {
+    tagline: "Mission Archive",
+    heading: "Project Log",
+    intro:
+      "Quest archive — all developer operations, full-stack pipelines, and vintage terminal prototypes thoroughly cataloged and documented. Press view to inspect the source modules.",
+  },
+}[lang];
 ---
 
 <HeroPanel
   headingId="projects-hero-heading"
-  tagline="Mission Archive"
-  heading="Project Log"
-  intro="Quest archive — all developer operations, full-stack pipelines, and vintage terminal prototypes thoroughly cataloged and documented. Press view to inspect the source modules."
+  tagline={copy.tagline}
+  heading={copy.heading}
+  intro={copy.intro}
 />

@@ -14,9 +14,18 @@
 // GET IN TOUCH to /contact/.
 import HeroPanel from "@components/Sections/Global/HeroPanel.astro";
 import Scoreboard from "@components/Sections/Global/Scoreboard.astro";
-import portfolioData from "@config/portfolioData.json";
+import { getPortfolioData } from "@config/i18n";
+import { getLangFromUrl, localizePath } from "@js/i18n";
 
+const lang = getLangFromUrl(Astro.url);
+const portfolioData = getPortfolioData(lang);
 const { tagline, heading, bio } = portfolioData.profile;
+
+// Bilingual section copy: the CTA labels (portfolioData holds the locale-aware values).
+const copy = {
+  es: { projects: "Ver proyectos", contact: "Contáctame" },
+  en: { projects: "View Projects", contact: "Get in Touch" },
+}[lang];
 
 // The strip sits on the theme-aware `bg-muted` (a light-blue scoreboard in light mode, the dark
 // #272939 panel in dark) — the same call the home Stats strip makes. It reuses the shared <Scoreboard>
@@ -42,11 +51,17 @@ const strip = portfolioData.stats.profile.map((text, i) => ({
   </div>
 
   <div class="flex flex-col gap-4 pt-1 sm:flex-row">
-    <a href="/projects/" class="pixel-btn pixel-btn--blue px-5 py-4 text-sm uppercase sm:text-base">
-      View Projects
+    <a
+      href={localizePath("/projects/", lang)}
+      class="pixel-btn pixel-btn--blue px-5 py-4 text-sm uppercase sm:text-base"
+    >
+      {copy.projects}
     </a>
-    <a href="/contact/" class="pixel-btn px-5 py-4 text-sm uppercase sm:text-base">
-      Get in Touch
+    <a
+      href={localizePath("/contact/", lang)}
+      class="pixel-btn px-5 py-4 text-sm uppercase sm:text-base"
+    >
+      {copy.contact}
     </a>
   </div>
 

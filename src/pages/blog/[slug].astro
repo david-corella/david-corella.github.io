@@ -6,9 +6,9 @@
 // glob loader gives single-segment ids (`<slug>` for `<slug>/index.mdx`), so a plain `[slug]` fits.
 import BlogArticle from "@components/Sections/Blog/BlogArticle.astro";
 import RelatedPosts from "@components/Sections/Blog/RelatedPosts.astro";
-import siteData from "@config/siteData.json";
-import { siteLocale } from "@config/siteSettings.json";
+import { getSiteData, localeMeta } from "@config/i18n";
 import { getSortedPosts } from "@js/blogData";
+import type { Lang } from "@js/i18n";
 import { getAdjacentPosts, getRelatedPosts } from "@js/postCards";
 import { readingTime } from "@js/readingTime";
 import { getArticleSchema, getBreadcrumbSchema, organizationId } from "@js/schema";
@@ -16,9 +16,15 @@ import BaseLayout from "@layouts/BaseLayout.astro";
 import type { GetStaticPaths } from "astro";
 import { type CollectionEntry, getEntry, render } from "astro:content";
 
+// This route file owns one locale; the /en/ mirror is a sibling page.
+const locale: Lang = "es";
+
 export const getStaticPaths = (async () => {
-  const posts = await getSortedPosts();
-  return posts.map((entry) => ({ params: { slug: entry.id }, props: { entry, posts } }));
+  const posts = await getSortedPosts("es");
+  return posts.map((entry) => ({
+    params: { slug: entry.id.split("/").pop() ?? entry.id },
+    props: { entry, posts },
+  }));
 }) satisfies GetStaticPaths;
 
 interface Props {
@@ -26,6 +32,10 @@ interface Props {
   posts: CollectionEntry<"blog">[];
 }
 const { entry, posts } = Astro.props as Props;
+const siteData = getSiteData(locale);
+const { intlLocale } = localeMeta(locale);
+const prefix = "";
+const slug = entry.id.split("/").pop() ?? entry.id;
 const { data } = entry;
 const { Content } = await render(entry);
 
@@ -39,16 +49,16 @@ const author = {
 
 const readMinutes = readingTime(entry.body ?? "");
 const dateLabel = data.pubDate
-  .toLocaleDateString(siteLocale, { month: "short", day: "numeric", year: "numeric" })
+  .toLocaleDateString(intlLocale, { month: "short", day: "numeric", year: "numeric" })
   .toUpperCase();
 const dateISO = data.pubDate.toISOString();
 
-const { prev, next } = getAdjacentPosts(posts, entry.id);
+const { prev, next } = getAdjacentPosts(posts, entry.id, locale);
 const related = getRelatedPosts(posts, entry.id, 2);
 
 // SEO: BlogPosting + a BreadcrumbList matching the visible breadcrumb (never emit one
 // without the other). Absolute URLs resolve against `site`.
-const canonical = new URL(`/blog/${entry.id}/`, Astro.site).href;
+const canonical = new URL(`${prefix}/blog/${slug}/`, Astro.site).href;
 // author's public URL (the authors collection's authorLink), resolved absolute; publisher points at
 // the same Organization @id BaseHead emits site-wide, so the Article joins that graph by reference.
 const authorUrl = authorEntry ? new URL(authorEntry.data.authorLink, Astro.site).href : undefined;
@@ -61,12 +71,12 @@ const articleSchema = getArticleSchema({
   dateModified: data.updatedDate?.toISOString(),
   authorName: author.name,
   authorUrl,
-  inLanguage: siteLocale,
+  inLanguage: intlLocale,
   publisherId: organizationId(canonical),
 });
 const breadcrumbSchema = getBreadcrumbSchema([
-  { name: "Home", url: new URL("/", Astro.site).href },
-  { name: "Blog", url: new URL("/blog/", Astro.site).href },
+  { name: "Inicio", url: new URL(`${prefix}/`, Astro.site).href },
+  { name: "Blog", url: new URL(`${prefix}/blog/`, Astro.site).href },
   { name: data.title, url: canonical },
 ]);
 ---

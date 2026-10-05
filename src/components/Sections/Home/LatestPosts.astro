@@ -7,9 +7,18 @@
 // stood in until the blog route landed (the same rewire the Featured Projects section got).
 import CardGrid from "@components/Sections/Global/CardGrid.astro";
 import { getSortedPosts } from "@js/blogData";
+import { getLangFromUrl } from "@js/i18n";
 import { toPostCard } from "@js/postCards";
 
-const posts = (await getSortedPosts()).slice(0, 3).map(toPostCard);
+const lang = getLangFromUrl(Astro.url);
+const copy = {
+  es: { title: "Últimas entradas" },
+  en: { title: "Latest Posts" },
+}[lang];
+
+const posts = (await getSortedPosts(lang))
+  .slice(0, 3)
+  .map((entry) => toPostCard(entry, lang));
 ---
 
-<CardGrid headingId="latest-posts-heading" title="Latest Posts" items={posts} />
+<CardGrid headingId="latest-posts-heading" title={copy.title} items={posts} />

@@ -6,7 +6,9 @@
 //
 // ponytail: sections render as a heading + paragraphs only (no nested lists/tables). For richer
 // legal docs, promote legalData to a markdown content collection and render <Content /> here.
+import { localeMeta } from "@config/i18n";
 import { type LegalPageProps } from "@config/types/configDataTypes";
+import { getLangFromUrl } from "@js/i18n";
 import { formatDate } from "@js/textUtils";
 
 interface Props {
@@ -14,14 +16,22 @@ interface Props {
 }
 
 const { page } = Astro.props as Props;
+
+const lang = getLangFromUrl(Astro.url);
+const copy = {
+  es: { updated: "Última actualización:" },
+  en: { updated: "Last updated:" },
+}[lang];
 ---
 
 <article class="site-container mx-auto max-w-3xl py-16 md:py-24">
   <header class="border-border flex flex-col gap-3 border-b pb-8">
     <h1 class="h1 text-balance"><span class="main-text-gradient">{page.title}</span></h1>
     <p class="text-muted-foreground text-sm">
-      Last updated:{" "}
-      <time datetime={page.lastUpdated}>{formatDate(page.lastUpdated)}</time>
+      {copy.updated}{" "}
+      <time datetime={page.lastUpdated}
+        >{formatDate(page.lastUpdated, localeMeta(lang).intlLocale)}</time
+      >
     </p>
   </header>
 

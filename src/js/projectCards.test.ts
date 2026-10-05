@@ -35,8 +35,14 @@ assert.equal(
 assert.equal(card.title, "Building a Real-Time Chat App", "cardTitle wins over title when present");
 assert.equal(card.badgeLabel, "[Complete]");
 assert.equal(card.badgeVariant, "success");
-assert.equal(card.cta, "View");
+assert.equal(card.cta, "Ver", "Spanish is the default locale (cta 'Ver')");
 assert.deepEqual(card.tags, ["React", "Node.js"]);
+
+// locale: English cards get an /en prefix and the English CTA; a locale-prefixed id still yields the slug.
+assert.equal(toProjectCard(stub, "en").href, "/en/projects/realtime-chat/");
+assert.equal(toProjectCard(stub, "en").cta, "View");
+const prefixed = { ...stub, id: "es/warpark" } as unknown as CollectionEntry<"projects">;
+assert.equal(toProjectCard(prefixed).href, "/projects/warpark/", "id locale prefix is stripped");
 
 // cardTitle absent → falls back to the canonical title.
 const noCardTitle = {

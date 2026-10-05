@@ -1,0 +1,35 @@
+---
+title: "Sistema de Monitoreo de Interfaces de Red"
+cardTitle: "Monitor de interfaces"
+description: "Aplicación de escritorio en C# que captura y registra el estado de las interfaces de red en SQL Server."
+tagline: "Desarrollo multihilo y programación asíncrona para un monitor de infraestructura tolerante a fallos."
+status: "complete"
+moduleId: "#02_NETMON"
+order: 2
+thumbnail: "../../../../assets/projects/red-monitor.png"
+thumbnailAlt: "Formulario principal del monitor de interfaces de red"
+tech: ["C#", "Windows Forms", ".NET", "SQL Server"]
+specs:
+  - { label: "Lenguaje", value: "C#" }
+  - { label: "Interfaz", value: "Windows Forms" }
+  - { label: "Persistencia", value: "SQL Server" }
+  - { label: "Concurrencia", value: "async / await" }
+features:
+  - lead: "Escaneo asíncrono"
+    text: "Tareas en segundo plano (Task.Run) para no bloquear la interfaz."
+  - lead: "Registro seguro"
+    text: "Transacciones explícitas con confirmación y reversión para preservar la integridad."
+  - lead: "Datos del sistema"
+    text: "Lectura de red e infraestructura vía System.Net.NetworkInformation."
+archCaption: "[Monitoreo de red]"
+challenge:
+  title: "Reto: operaciones lentas en la UI"
+  body: "El escaneo de red y la escritura en base de datos son costosos y congelaban la interfaz."
+solution:
+  title: "Solución: concurrencia y transacciones"
+  body: "Moví el trabajo pesado a hilos secundarios y envolví la persistencia en transacciones explícitas."
+---
+
+Aplicación de escritorio cuyo propósito es capturar el estado actual de todas las interfaces de red
+del equipo y guardar ese registro de forma segura en SQL Server. El desarrollo reforzó mis criterios
+para estructurar software robusto, tolerante a fallos y responsivo.

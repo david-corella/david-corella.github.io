@@ -1,7 +1,7 @@
 ---
-name: "@admin"
+name: "David Corella"
 avatar: "../../assets/images/hero-avatar.jpg"
 authorLink: "/about/"
 ---
 
-Field operative behind 8-BitQuest — full-stack builds, vintage architectures, and pixel-perfect UI.
+Ingeniero de Software Full-Stack — builds full-stack escalables, backend, redes y datos.

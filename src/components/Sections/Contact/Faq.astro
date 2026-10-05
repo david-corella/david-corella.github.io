@@ -13,30 +13,54 @@ import SectionHeading from "@components/Sections/Global/SectionHeading.astro";
 import { Accordion, AccordionContent, AccordionItem } from "@components/ui/accordion";
 import { PixelPanel } from "@components/ui/pixel-panel";
 import { Reveal } from "@components/ui/reveal";
+import { getLangFromUrl } from "@js/i18n";
 
-const faqs = [
-  {
-    q: "Q: Can I submit my own guest post / devlog?",
-    a: "YES! I am always looking for fellow developers and historians to write about retro tech. Send me a pitch with your outline, and I'll check your specs.",
+const lang = getLangFromUrl(Astro.url);
+const copy = {
+  es: {
+    heading: "Preguntas Frecuentes del Sistema",
+    faqs: [
+      {
+        q: "P: ¿Puedo enviar mi propio guest post / devlog?",
+        a: "¡SÍ! Siempre busco colegas desarrolladores e historiadores que escriban sobre tecnología retro. Envíame una propuesta con tu esquema y revisaré tus especificaciones.",
+      },
+      {
+        q: "P: ¿Dónde puedo encontrar el código de tus proyectos?",
+        a: "Todos mis pipelines activos, motores de juego y pipelines de devops retro están alojados en mi repositorio de GitHub. Las pull requests son bienvenidas, héroe.",
+      },
+      {
+        q: "P: ¿Con qué frecuencia se publican nuevas misiones?",
+        a: "Los nuevos devlogs y tutoriales se publican cada martes alterno. Suscríbete a mis transmisiones de Discord para recibir alertas en vivo.",
+      },
+    ],
   },
-  {
-    q: "Q: Where can I find the code for your projects?",
-    a: "All my active pipelines, game engines, and retro devops pipelines are hosted on my GitHub repository. Pull requests are welcome, hero.",
+  en: {
+    heading: "Frequently Asked System Questions",
+    faqs: [
+      {
+        q: "Q: Can I submit my own guest post / devlog?",
+        a: "YES! I am always looking for fellow developers and historians to write about retro tech. Send me a pitch with your outline, and I'll check your specs.",
+      },
+      {
+        q: "Q: Where can I find the code for your projects?",
+        a: "All my active pipelines, game engines, and retro devops pipelines are hosted on my GitHub repository. Pull requests are welcome, hero.",
+      },
+      {
+        q: "Q: How often are new quests published?",
+        a: "New devlogs and tutorials are released every alternate Tuesday. Subscribe to my Discord transmissions to get live ping alerts.",
+      },
+    ],
   },
-  {
-    q: "Q: How often are new quests published?",
-    a: "New devlogs and tutorials are released every alternate Tuesday. Subscribe to my Discord transmissions to get live ping alerts.",
-  },
-] as const;
+}[lang];
 ---
 
 <Reveal as="section" aria-labelledby="faq-heading" class="flex flex-col gap-6">
-  <SectionHeading id="faq-heading" title="Frequently Asked System Questions" />
+  <SectionHeading id="faq-heading" title={copy.heading} />
 
   <PixelPanel elevated class="px-6 py-2 sm:px-8">
     <Accordion class="border-t-0">
       {
-        faqs.map((faq, i) => (
+        copy.faqs.map((faq, i) => (
           <AccordionItem
             open={i === 0}
             class="border-base-300 border-t-0 border-b-2 border-dashed [&[open]_[data-faq-v]]:opacity-0"

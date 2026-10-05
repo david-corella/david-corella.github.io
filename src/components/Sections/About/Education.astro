@@ -1,0 +1,109 @@
+---
+// src/components/Sections/About/Education.astro — Formación / Certificaciones / Idiomas.
+//
+// Three pixel panels (studies, certifications, languages) with retro badges. Replaces the template's
+// demo "Achievements" grid with David's real credentials. Bilingual copy lives here.
+import SectionHeading from "@components/Sections/Global/SectionHeading.astro";
+import { Badge } from "@components/ui/badge";
+import { PixelPanel } from "@components/ui/pixel-panel";
+import { Reveal } from "@components/ui/reveal";
+import { getLangFromUrl } from "@js/i18n";
+
+const lang = getLangFromUrl(Astro.url);
+
+const copy = {
+  es: {
+    heading: "Formación y credenciales",
+    educationTag: "Formación",
+    certificationsTag: "Certificaciones",
+    languagesTag: "Idiomas",
+    degree: "Ingeniería en Sistemas de Información",
+    school: "Universidad de Sonora (UNISON), Hermosillo, Sonora",
+    period: "2024 — 2028",
+    cert1: "Técnico en Logística",
+    cert1Org: "CECyTE",
+    cert2: "Diploma en Big Data",
+    cert2Org: "Fundación Carlos Slim",
+    spanish: "Español",
+    english: "Inglés",
+    french: "Francés",
+    native: "Nativo",
+  },
+  en: {
+    heading: "Education & credentials",
+    educationTag: "Education",
+    certificationsTag: "Certifications",
+    languagesTag: "Languages",
+    degree: "B.Sc. in Information Systems Engineering",
+    school: "University of Sonora (UNISON), Hermosillo, Sonora",
+    period: "2024 — 2028",
+    cert1: "Logistics Technician",
+    cert1Org: "CECyTE",
+    cert2: "Big Data Diploma",
+    cert2Org: "Carlos Slim Foundation",
+    spanish: "Spanish",
+    english: "English",
+    french: "French",
+    native: "Native",
+  },
+}[lang];
+
+const education = [{ title: copy.degree, org: copy.school, period: copy.period }];
+const certifications = [
+  { title: copy.cert1, org: copy.cert1Org, year: "2023" },
+  { title: copy.cert2, org: copy.cert2Org, year: "2026" },
+];
+const languagesList = [
+  { name: copy.spanish, level: copy.native },
+  { name: copy.english, level: "B2" },
+  { name: copy.french, level: "A2" },
+];
+---
+
+<Reveal as="section" aria-labelledby="education-heading" class="flex flex-col gap-6">
+  <SectionHeading id="education-heading" title={copy.heading} />
+
+  <div class="grid gap-6 md:grid-cols-3">
+    <PixelPanel class="flex flex-col items-start gap-4 p-6">
+      <Badge pixel variant="info">{copy.educationTag}</Badge>
+      {
+        education.map((item) => (
+          <div class="flex flex-col gap-1">
+            <h3 class="text-foreground text-sm font-bold">{item.title}</h3>
+            <p class="text-muted-foreground text-xs">{item.org}</p>
+            <p class="text-info font-display text-[10px] uppercase">{item.period}</p>
+          </div>
+        ))
+      }
+    </PixelPanel>
+
+    <PixelPanel class="flex flex-col items-start gap-4 p-6">
+      <Badge pixel variant="success">{copy.certificationsTag}</Badge>
+      <ul class="flex flex-col gap-4">
+        {
+          certifications.map((item) => (
+            <li class="flex flex-col gap-1">
+              <span class="text-foreground text-sm font-bold">{item.title}</span>
+              <span class="text-muted-foreground text-xs">{item.org}</span>
+              <span class="text-info font-display text-[10px] uppercase">{item.year}</span>
+            </li>
+          ))
+        }
+      </ul>
+    </PixelPanel>
+
+    <PixelPanel class="flex flex-col items-start gap-4 p-6">
+      <Badge pixel variant="secondary">{copy.languagesTag}</Badge>
+      <dl class="flex w-full flex-col gap-3">
+        {
+          languagesList.map((item) => (
+            <div class="flex items-center justify-between gap-4 text-sm">
+              <dt class="text-foreground font-bold uppercase">{item.name}</dt>
+              <dd class="text-muted-foreground">{item.level}</dd>
+            </div>
+          ))
+        }
+      </dl>
+    </PixelPanel>
+  </div>
+</Reveal>

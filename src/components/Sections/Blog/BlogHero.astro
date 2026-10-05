@@ -4,11 +4,28 @@
 // (reproduced verbatim from the mock), so it takes no props. Renders the shared Global/HeroPanel so
 // it can't drift from the other page heroes. Above the fold → no <Reveal>.
 import HeroPanel from "@components/Sections/Global/HeroPanel.astro";
+import { getLangFromUrl } from "@js/i18n";
+
+const lang = getLangFromUrl(Astro.url);
+const copy = {
+  es: {
+    tagline: "Control de Misión",
+    heading: "Últimas Entradas",
+    intro:
+      "Despachos Dev — Notas de Campo desde la Frontera del Código. Registro en tiempo real de operaciones web, arquitecturas vintage e implementaciones full-stack poco convencionales.",
+  },
+  en: {
+    tagline: "Mission Control",
+    heading: "Latest Posts",
+    intro:
+      "Dev Dispatches — Field Notes from the Code Frontier. Real-time logging of web operations, vintage architectures, and unconventional full-stack implementations.",
+  },
+}[lang];
 ---
 
 <HeroPanel
   headingId="blog-hero-heading"
-  tagline="Mission Control"
-  heading="Latest Posts"
-  intro="Dev Dispatches — Field Notes from the Code Frontier. Real-time logging of web operations, vintage architectures, and unconventional full-stack implementations."
+  tagline={copy.tagline}
+  heading={copy.heading}
+  intro={copy.intro}
 />

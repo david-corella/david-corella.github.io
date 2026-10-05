@@ -5,7 +5,8 @@
 // Press Start 2P title followed by a dashed pixel rule that fills the remaining width. Rendered once
 // per section (Latest Posts, Tech Stack, Featured Projects, About Me, Contact). Tokens only — the
 // airy-blue heading (`text-info`) and the base-300 rule read on both the dark navy and light
-// lavender grounds, so it flips for free. `id` lets the section wire `aria-labelledby` to it.
+// lavender grounds, so it flips for free. `id` lets the section wire `aria-labelledby` to it. i18n:
+// `title` is supplied already localized by the calling section, so this primitive stays locale-neutral.
 interface Props {
   title: string;
   id?: string;

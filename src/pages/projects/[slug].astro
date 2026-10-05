@@ -5,21 +5,29 @@
 // links off the SAME id — so the grid links and the generated routes can never drift. The glob
 // loader gives single-segment ids (`<slug>` for `<slug>/index.mdx`), so a plain `[slug]` param fits.
 import ProjectArticle from "@components/Sections/Project/ProjectArticle.astro";
-import siteData from "@config/siteData.json";
+import { getSiteData } from "@config/i18n";
+import type { Lang } from "@js/i18n";
 import { getSortedProjects } from "@js/projectData";
 import BaseLayout from "@layouts/BaseLayout.astro";
 import type { GetStaticPaths } from "astro";
 import { type CollectionEntry, render } from "astro:content";
 
+// This route file owns one locale; the /en/ mirror is a sibling page.
+const locale: Lang = "es";
+
 export const getStaticPaths = (async () => {
-  const projects = await getSortedProjects();
-  return projects.map((entry) => ({ params: { slug: entry.id }, props: { entry } }));
+  const projects = await getSortedProjects("es");
+  return projects.map((entry) => ({
+    params: { slug: entry.id.split("/").pop() ?? entry.id },
+    props: { entry },
+  }));
 }) satisfies GetStaticPaths;
 
 interface Props {
   entry: CollectionEntry<"projects">;
 }
 const { entry } = Astro.props as Props;
+const siteData = getSiteData(locale);
 const { Content } = await render(entry);
 ---
 

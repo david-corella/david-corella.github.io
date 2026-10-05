@@ -17,6 +17,15 @@ import SectionHeading from "@components/Sections/Global/SectionHeading.astro";
 import { PixelIcon, type PixelIconName } from "@components/svg/pixel-icons";
 import { PixelPanel } from "@components/ui/pixel-panel";
 import { Reveal } from "@components/ui/reveal";
+import { getLangFromUrl } from "@js/i18n";
+
+const lang = getLangFromUrl(Astro.url);
+
+// Bilingual section copy — the skill names below are proper nouns, so only the heading changes.
+const copy = {
+  es: { heading: "Stack tecnológico" },
+  en: { heading: "Tech Stack" },
+}[lang];
 
 type Tone = "success" | "secondary" | "info";
 const skills: readonly { name: string; icon: PixelIconName; tone: Tone }[] = [
@@ -42,7 +51,7 @@ const toneBorder: Record<Tone, string> = {
 ---
 
 <Reveal as="section" aria-labelledby="skill-tree-heading" class="flex flex-col gap-6">
-  <SectionHeading id="skill-tree-heading" title="Tech Stack" />
+  <SectionHeading id="skill-tree-heading" title={copy.heading} />
 
   <ul class="grid gap-6 sm:grid-cols-3">
     {
