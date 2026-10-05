@@ -1,37 +1,38 @@
 ---
-title: "Sistema de Monitoreo de Interfaces de Red"
-cardTitle: "Monitor de interfaces"
-description: "Aplicación de escritorio en C# que captura y registra el estado de las interfaces de red en SQL Server."
-tagline: "Desarrollo multihilo y programación asíncrona para un monitor de infraestructura tolerante a fallos."
+title: "Listado de Interfaces de Red"
+cardTitle: "Listado de interfaces"
+description: "Aplicación de consola en C# que detecta y lista las interfaces de red del equipo con sus datos básicos."
+tagline: "Explorar la pila de red de Windows con System.Net.NetworkInformation: del adaptador a su MAC e IP."
 status: "complete"
 moduleId: "#02_NETMON"
 order: 2
 thumbnail: "../../../../assets/projects/red-monitor.png"
-thumbnailAlt: "Formulario principal del monitor de interfaces de red"
-tech: ["C#", "Windows Forms", ".NET", "SQL Server"]
+thumbnailAlt: "Salida del listado de interfaces de red en consola"
+tech: ["C#", ".NET 8", "Redes"]
 links:
   - { label: "Código fuente (GitHub)", href: "https://github.com/david-corella/interfaces-red" }
 specs:
   - { label: "Lenguaje", value: "C#" }
-  - { label: "Interfaz", value: "Windows Forms" }
-  - { label: "Persistencia", value: "SQL Server" }
-  - { label: "Concurrencia", value: "async / await" }
+  - { label: "Plataforma", value: ".NET 8" }
+  - { label: "Interfaz", value: "Consola" }
+  - { label: "APIs", value: "System.Net.NetworkInformation" }
 features:
-  - lead: "Escaneo asíncrono"
-    text: "Tareas en segundo plano (Task.Run) para no bloquear la interfaz."
-  - lead: "Registro seguro"
-    text: "Transacciones explícitas con confirmación y reversión para preservar la integridad."
-  - lead: "Datos del sistema"
-    text: "Lectura de red e infraestructura vía System.Net.NetworkInformation."
-archCaption: "[Monitoreo de red]"
+  - lead: "Detección de adaptadores"
+    text: "Enumera todas las interfaces con NetworkInterface.GetAllNetworkInterfaces()."
+  - lead: "Datos por interfaz"
+    text: "Descripción, nombre, tipo, estado de operación y dirección MAC formateada."
+  - lead: "Direcciones IP"
+    text: "Lee las direcciones IPv4 e IPv6 (UnicastAddresses) de cada interfaz."
+archCaption: "[Listado de red]"
 challenge:
-  title: "Reto: operaciones lentas en la UI"
-  body: "El escaneo de red y la escritura en base de datos son costosos y congelaban la interfaz."
+  title: "Reto: datos de red inconsistentes"
+  body: "No todos los adaptadores tienen MAC ni direcciones IP asignadas, y algunas propiedades lanzan excepciones."
 solution:
-  title: "Solución: concurrencia y transacciones"
-  body: "Moví el trabajo pesado a hilos secundarios y envolví la persistencia en transacciones explícitas."
+  title: "Solución: lectura defensiva"
+  body: "Recorrí las interfaces con comprobaciones (MAC válida y captura de NetworkInformationException) para imprimir un listado estable y legible."
 ---
 
-Aplicación de escritorio cuyo propósito es capturar el estado actual de todas las interfaces de red
-del equipo y guardar ese registro de forma segura en SQL Server. El desarrollo reforzó mis criterios
-para estructurar software robusto, tolerante a fallos y responsivo.
+Aplicación de consola en C# (.NET 8) que detecta las interfaces de red del equipo y muestra, para
+cada una, su descripción, nombre, tipo, estado de operación, dirección MAC y direcciones IP
+(IPv4/IPv6). El proyecto me permitió trabajar con la API `System.Net.NetworkInformation` para
+inspeccionar la pila de red de Windows desde código.

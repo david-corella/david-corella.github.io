@@ -1,37 +1,38 @@
 ---
-title: "Network Interface Monitoring System"
-cardTitle: "Interface monitor"
-description: "A C# desktop application that captures and logs the state of the machine's network interfaces to SQL Server."
-tagline: "Multithreaded, asynchronous development for a fault-tolerant infrastructure monitor."
+title: "Network Interface Lister"
+cardTitle: "Interface lister"
+description: "A C# console application that detects and lists the machine's network interfaces with their basic data."
+tagline: "Exploring the Windows network stack with System.Net.NetworkInformation: from adapter to MAC and IP."
 status: "complete"
 moduleId: "#02_NETMON"
 order: 2
 thumbnail: "../../../../assets/projects/red-monitor.png"
-thumbnailAlt: "Main form of the network interface monitor"
-tech: ["C#", "Windows Forms", ".NET", "SQL Server"]
+thumbnailAlt: "Console output of the network interface listing"
+tech: ["C#", ".NET 8", "Networking"]
 links:
   - { label: "Source code (GitHub)", href: "https://github.com/david-corella/interfaces-red" }
 specs:
   - { label: "Language", value: "C#" }
-  - { label: "UI", value: "Windows Forms" }
-  - { label: "Persistence", value: "SQL Server" }
-  - { label: "Concurrency", value: "async / await" }
+  - { label: "Platform", value: ".NET 8" }
+  - { label: "Interface", value: "Console" }
+  - { label: "APIs", value: "System.Net.NetworkInformation" }
 features:
-  - lead: "Asynchronous scanning"
-    text: "Background tasks (Task.Run) so the UI never blocks."
-  - lead: "Safe logging"
-    text: "Explicit transactions with commit and rollback to preserve integrity."
-  - lead: "System data"
-    text: "Reading network and infrastructure info via System.Net.NetworkInformation."
-archCaption: "[Network monitoring]"
+  - lead: "Adapter detection"
+    text: "Enumerates every interface with NetworkInterface.GetAllNetworkInterfaces()."
+  - lead: "Per-interface data"
+    text: "Description, name, type, operational status, and formatted MAC address."
+  - lead: "IP addresses"
+    text: "Reads each interface's IPv4 and IPv6 addresses (UnicastAddresses)."
+archCaption: "[Network listing]"
 challenge:
-  title: "Challenge: slow work on the UI thread"
-  body: "Network scanning and database writes are expensive and froze the interface."
+  title: "Challenge: inconsistent network data"
+  body: "Not every adapter has a MAC or assigned IP addresses, and some properties throw exceptions."
 solution:
-  title: "Solution: concurrency & transactions"
-  body: "I moved the heavy work to background threads and wrapped persistence in explicit transactions."
+  title: "Solution: defensive reading"
+  body: "I iterated the interfaces with checks (valid MAC and NetworkInformationException handling) to print a stable, readable listing."
 ---
 
-A desktop application whose purpose is to capture the current state of every network interface on the
-machine and store that log securely in SQL Server. The work sharpened my criteria for structuring
-robust, fault-tolerant, and responsive software.
+A C# (.NET 8) console application that detects the machine's network interfaces and shows, for each
+one, its description, name, type, operational status, MAC address, and IP addresses (IPv4/IPv6). The
+project let me work with the `System.Net.NetworkInformation` API to inspect the Windows network stack
+from code.
