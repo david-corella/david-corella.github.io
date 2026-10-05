@@ -57,6 +57,9 @@ const projectsCollection = defineCollection({
       thumbnail: image(),
       thumbnailAlt: z.string(),
       tech: z.array(z.string()), // flat tag pills on the card
+      // Optional external resources rendered as buttons on the detail page: source code, PDFs,
+      // prototypes. `label` is localized per entry; `href` is an absolute URL or a /docs/ asset.
+      links: z.array(z.object({ label: z.string(), href: z.string() })).optional(),
       specs: z.array(z.object({ label: z.string(), value: z.string() })), // SYS_SPECS rows
       features: z.array(z.object({ lead: z.string(), text: z.string() })), // SYSTEM FEATURES list
       archCaption: z.string(), // ARC_MAP caption, e.g. "[Packet Switching Engine]"

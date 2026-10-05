@@ -24,7 +24,11 @@ export const siteData: SiteDataProps = {
     alt: "David Corella — Ingeniero de Software Full-Stack",
   },
 
-  sameAs: ["https://github.com/david-corella", "https://www.linkedin.com/in/davidcorella"],
+  sameAs: [
+    "https://github.com/david-corella",
+    "https://www.linkedin.com/in/david-corella-8967a637b/",
+    "https://www.instagram.com/david_corella_/",
+  ],
 };
 
 export const portfolioData: PortfolioDataProps = {

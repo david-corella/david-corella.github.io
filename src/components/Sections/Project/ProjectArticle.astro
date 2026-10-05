@@ -20,13 +20,14 @@ interface Props {
   project: CollectionEntry<"projects">["data"];
 }
 const { project } = Astro.props as Props;
-const { title, tagline, status, moduleId, specs, features, archCaption, challenge, solution } =
+const { title, tagline, status, moduleId, links, specs, features, archCaption, challenge, solution } =
   project;
 
 const lang = getLangFromUrl(Astro.url);
 const copy = {
   es: {
     back: "Volver al Registro de Proyectos",
+    links: "Recursos",
     moduleLabel: "Módulo_ID",
     overview: "Resumen del Proyecto",
     features: "Características del Sistema",
@@ -38,6 +39,7 @@ const copy = {
   },
   en: {
     back: "Back to Project Log",
+    links: "Resources",
     moduleLabel: "Module_ID",
     overview: "Project Overview",
     features: "System Features",
@@ -81,6 +83,28 @@ const statusLabel = status === "complete" ? copy.statusComplete : copy.statusInP
       <h1 id="project-hero-heading" class="h1 text-info text-balance">{title}</h1>
 
       <p class="text-muted-foreground max-w-3xl text-base text-balance">{tagline}</p>
+
+      {
+        links && links.length > 0 && (
+          <div class="flex flex-col gap-2 pt-2">
+            <span class="text-muted-foreground text-[10px] font-bold tracking-wide uppercase">
+              {copy.links}
+            </span>
+            <div class="flex flex-wrap gap-3">
+              {links.map((link, i) => (
+                <a
+                  href={link.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class={`pixel-btn px-4 py-3 text-xs uppercase sm:text-sm ${i === 0 ? "pixel-btn--blue" : ""}`}
+                >
+                  {link.label}
+                </a>
+              ))}
+            </div>
+          </div>
+        )
+      }
     </div>
   </PixelPanel>
 

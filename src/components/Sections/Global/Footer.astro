@@ -35,6 +35,8 @@ const copyright = `© ${year} — ${t("footer.close")}`;
 type SocialLink = { name: PixelIconName; label: string; href: string; external?: boolean };
 const socialLinks: readonly SocialLink[] = [
   { ...socialLink("github", lang), external: true },
+  { ...socialLink("linkedin", lang), external: true },
+  { ...socialLink("instagram", lang), external: true },
   { name: "rss", label: t("footer.rss"), href: localizePath("/rss.xml", lang) },
   { name: "email", label: t("footer.email"), href: `mailto:${siteData.author.email}` },
 ];

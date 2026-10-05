@@ -1,15 +1,11 @@
 ---
 // src/components/Sections/Contact/InfoCards.astro — Figma "InfoCardsContainer" (node 9:53).
 //
-// Three pixel info cards beside the form: a retro tag, a title, a one-line blurb, and a linked
-// value box. Reuses the shared pixel surface + badge; the value box is a real <a> that goes green on
-// hover (the house active/hover colour). Tokens only.
+// Pixel info cards beside the form: a retro tag, a title, a one-line blurb, and a linked value box.
+// The value box is a real <a> that goes green on hover. Tokens only.
 //
-// WIRING (real, not transcribed): the E-MAIL value is `siteData.author.email` (→ mailto); GITHUB and
-// DISCORD resolve through `@config/socialData`, which owns the `sameAs` derivation every section
-// shares and falls back to the platform root when `sameAs` is empty. The mock's placeholder brand
-// values (HELLO@PIXELQUESTS.COM, GITHUB.COM/PIXELQUESTS) are NOT transcribed. Fill `sameAs` +
-// `author.email` in siteData to point these at real profiles.
+// WIRING: the E-MAIL value is `siteData.author.email` (→ mailto); GITHUB, LINKEDIN and INSTAGRAM
+// resolve through `@config/socialData`, which owns the `sameAs` derivation every section shares.
 import type { BadgeVariant } from "@components/ui/badge";
 import { Badge } from "@components/ui/badge";
 import { PixelPanel } from "@components/ui/pixel-panel";
@@ -21,30 +17,37 @@ const lang = getLangFromUrl(Astro.url);
 const siteData = getSiteData(lang);
 const email = siteData.author.email;
 const github = socialHref("github", lang);
-const discord = socialHref("discord", lang);
+const linkedin = socialHref("linkedin", lang);
+const instagram = socialHref("instagram", lang);
 
 const copy = {
   es: {
     emailTag: "Correo",
     emailTitle: "Telepatía",
     emailBlurb: "Enlace digital directo a mi buzón",
-    discordTag: "Comunidad",
-    discordTitle: "Barra de Discord",
-    discordBlurb: "Convive con otros hackers retro",
     githubTag: "Código",
     githubTitle: "Hub de GitHub",
-    githubBlurb: "Explora mis repositorios de código abierto",
+    githubBlurb: "Explora mis repositorios de código",
+    linkedinTag: "Profesional",
+    linkedinTitle: "LinkedIn",
+    linkedinBlurb: "Mi trayectoria y red profesional",
+    instagramTag: "Social",
+    instagramTitle: "Instagram",
+    instagramBlurb: "Un vistazo a mi día a día",
   },
   en: {
     emailTag: "E-Mail",
     emailTitle: "Telepathy",
     emailBlurb: "Direct digital link to my HQ mailbox",
-    discordTag: "Community",
-    discordTitle: "Discord Bar",
-    discordBlurb: "Hang out with fellow retro hackers",
     githubTag: "Codebase",
     githubTitle: "GitHub Hub",
-    githubBlurb: "Inspect my open-source pipelines",
+    githubBlurb: "Explore my code repositories",
+    linkedinTag: "Professional",
+    linkedinTitle: "LinkedIn",
+    linkedinBlurb: "My track record and professional network",
+    instagramTag: "Social",
+    instagramTitle: "Instagram",
+    instagramBlurb: "A glimpse into my day-to-day",
   },
 }[lang];
 
@@ -68,20 +71,28 @@ const cards: readonly {
     href: `mailto:${email}`,
   },
   {
-    tag: copy.discordTag,
-    tone: "success",
-    title: copy.discordTitle,
-    blurb: copy.discordBlurb,
-    value: display(discord),
-    href: discord,
-  },
-  {
     tag: copy.githubTag,
     tone: "secondary",
     title: copy.githubTitle,
     blurb: copy.githubBlurb,
     value: display(github),
     href: github,
+  },
+  {
+    tag: copy.linkedinTag,
+    tone: "primary",
+    title: copy.linkedinTitle,
+    blurb: copy.linkedinBlurb,
+    value: display(linkedin),
+    href: linkedin,
+  },
+  {
+    tag: copy.instagramTag,
+    tone: "success",
+    title: copy.instagramTitle,
+    blurb: copy.instagramBlurb,
+    value: display(instagram),
+    href: instagram,
   },
 ];
 ---

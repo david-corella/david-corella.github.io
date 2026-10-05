@@ -25,6 +25,12 @@ export const socialPlatforms = {
     match: "linkedin.com",
     fallback: "https://www.linkedin.com/",
   },
+  instagram: {
+    label: "Instagram",
+    icon: "instagram",
+    match: "instagram.com",
+    fallback: "https://www.instagram.com/",
+  },
   twitter: {
     label: "Twitter/X",
     icon: "twitter",
