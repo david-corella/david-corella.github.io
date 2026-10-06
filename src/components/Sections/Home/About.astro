@@ -9,12 +9,13 @@
 // (Location/Role/Favorite) are presentational and stay here. Avatar is a demo asset (plain <img>, no Sharp).
 import SectionHeading from "@components/Sections/Global/SectionHeading.astro";
 import { Reveal } from "@components/ui/reveal";
-import { getPortfolioData } from "@config/i18n";
+import { getPortfolioData, getSiteData } from "@config/i18n";
 import avatar from "@images/about-avatar.png";
 import { getLangFromUrl } from "@js/i18n";
 
 const lang = getLangFromUrl(Astro.url);
-const { shortBio, meta: profileMeta } = getPortfolioData(lang).profile;
+const siteData = getSiteData(lang);
+const { heading: profileHeading, shortBio, meta: profileMeta } = getPortfolioData(lang).profile;
 const copy = {
   es: { heading: "Sobre mí", location: "Ubicación", role: "Rol", favorite: "Favorito", alt: "Retrato pixel-art del autor del sitio" },
   en: {
@@ -33,6 +34,13 @@ const meta = [
 ---
 
 <Reveal as="section" aria-labelledby="about-heading" class="flex flex-col gap-6">
+  <div class="flex flex-col gap-2">
+    <h1 class="h1 text-info text-balance">{siteData.author.name}</h1>
+    <p class="text-secondary-700 dark:text-secondary font-display text-xs uppercase sm:text-sm">
+      {profileHeading}
+    </p>
+  </div>
+
   <SectionHeading id="about-heading" title={copy.heading} />
 
   <div class="flex flex-col gap-6 sm:flex-row sm:items-start">
