@@ -211,6 +211,9 @@
     background-color: var(--pixel-btn-face);
     color: var(--pixel-btn-ink);
     box-shadow: inset -4px -4px 0 0 var(--pixel-btn-depth);
+    transition:
+      transform 120ms ease-out,
+      box-shadow 120ms ease-out;
   }
   .pixel-btn--blue {
     --pixel-btn-face: var(--color-primary-500); /* #41a6f6 action blue */
@@ -230,14 +233,25 @@
   .pixel-btn:hover,
   .pixel-btn:focus-visible {
     background-color: var(--pixel-btn-face-hover);
-    box-shadow: inset -6px -6px 0 0 var(--pixel-btn-depth);
+    /* lift + hard pixel shadow, matching the project cards / tech chips */
+    box-shadow:
+      inset -6px -6px 0 0 var(--pixel-btn-depth),
+      5px 5px 0 0 var(--border);
+    transform: translate(-3px, -3px);
   }
   .pixel-btn:focus-visible {
     outline: 3px solid var(--outline);
     outline-offset: 5px;
   }
   .pixel-btn:active {
+    /* pressed: settle back down and drop the shadow */
     box-shadow: inset 4px 4px 0 0 var(--pixel-btn-depth);
+    transform: translate(0, 0);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .pixel-btn {
+      transition: none;
+    }
   }
   /* the notched black frame: :before draws the top/bottom bars, :after the left/right ones */
   .pixel-btn::before,
