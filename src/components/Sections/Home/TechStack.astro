@@ -43,8 +43,12 @@ const stack: readonly { label: string; icon: PixelIconName }[] = [
   <ul class="flex flex-wrap gap-3 sm:gap-4">
     {
       stack.map((tech) => (
-        <li class="origin-center transition-transform duration-200 ease-out will-change-transform hover:z-10 hover:scale-110 focus-within:scale-110 motion-reduce:transition-none motion-reduce:hover:scale-100">
-          <PixelChip icon={tech.icon} label={tech.label} />
+        <li>
+          <PixelChip
+            icon={tech.icon}
+            label={tech.label}
+            class="transition-transform hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-pixel-lg motion-reduce:transition-none"
+          />
         </li>
       ))
     }

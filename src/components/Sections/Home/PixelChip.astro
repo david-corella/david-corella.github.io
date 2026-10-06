@@ -19,8 +19,10 @@ interface Props {
   /** Accessible name when the visible label isn't enough (e.g. "Twitter/X profile"). */
   ariaLabel?: string;
   external?: boolean;
+  /** Extra classes merged onto the chip surface (e.g. a hover effect). */
+  class?: string;
 }
-const { icon, label, href, ariaLabel, external } = Astro.props as Props;
+const { icon, label, href, ariaLabel, external, class: className } = Astro.props as Props;
 
 const Tag = href ? "a" : "span";
 const attrs: HTMLAttributes<"a"> = href
@@ -36,7 +38,7 @@ const attrs: HTMLAttributes<"a"> = href
 const interactive = href
   ? "primary-focus hover:text-success motion-reduce:transition-none transition-colors"
   : "";
-const chipClass = ["inline-flex items-center gap-2 px-3 py-2", interactive]
+const chipClass = ["inline-flex items-center gap-2 px-3 py-2", interactive, className]
   .filter(Boolean)
   .join(" ");
 ---
