@@ -15,21 +15,26 @@ import { getLangFromUrl } from "@js/i18n";
 
 const lang = getLangFromUrl(Astro.url);
 const siteData = getSiteData(lang);
-const { heading: profileHeading, shortBio, meta: profileMeta } = getPortfolioData(lang).profile;
+const { shortBio, meta: profileMeta } = getPortfolioData(lang).profile;
 const copy = {
-  es: { heading: "Sobre mí", location: "Ubicación", role: "Rol", favorite: "Favorito", alt: "Retrato pixel-art del autor del sitio" },
+  es: {
+    heading: "Sobre mí",
+    subtitle: "Ingeniero en Sistemas",
+    location: "Ubicación",
+    role: "Rol",
+    alt: "Retrato pixel-art del autor del sitio",
+  },
   en: {
     heading: "About Me",
+    subtitle: "Systems Engineer",
     location: "Location",
     role: "Role",
-    favorite: "Favorite",
     alt: "Pixel-art portrait of the site author",
   },
 }[lang];
 const meta = [
   { label: copy.location, value: profileMeta.location },
   { label: copy.role, value: profileMeta.role },
-  { label: copy.favorite, value: profileMeta.favorite },
 ] as const;
 ---
 
@@ -37,7 +42,7 @@ const meta = [
   <div class="flex flex-col gap-2">
     <h1 class="h1 text-info text-balance">{siteData.author.name}</h1>
     <p class="text-secondary-700 dark:text-secondary font-display text-xs uppercase sm:text-sm">
-      {profileHeading}
+      {copy.subtitle}
     </p>
   </div>
 
