@@ -20,8 +20,19 @@ interface Props {
   project: CollectionEntry<"projects">["data"];
 }
 const { project } = Astro.props as Props;
-const { title, tagline, status, moduleId, links, specs, features, archCaption, challenge, solution } =
-  project;
+const {
+  title,
+  tagline,
+  status,
+  moduleId,
+  links,
+  specs,
+  features,
+  caseStudy,
+  archCaption,
+  challenge,
+  solution,
+} = project;
 
 const lang = getLangFromUrl(Astro.url);
 const copy = {
@@ -34,6 +45,11 @@ const copy = {
     specs: "ESPECIFICACIONES",
     archMap: "MAPA_ARQ",
     challenges: "Retos y Soluciones",
+    caseStudy: "Caso de Estudio",
+    requirements: "Requerimientos",
+    design: "Diseño de la solución",
+    implementation: "Implementación",
+    result: "Resultado",
     statusComplete: "[Completado]",
     statusInProgress: "[En Progreso]",
   },
@@ -46,6 +62,11 @@ const copy = {
     specs: "SYS_SPECS",
     archMap: "ARC_MAP",
     challenges: "Challenges & Solutions",
+    caseStudy: "Case Study",
+    requirements: "Requirements",
+    design: "How it was designed",
+    implementation: "How it was implemented",
+    result: "Result",
     statusComplete: "[Complete]",
     statusInProgress: "[In Progress]",
   },
@@ -168,6 +189,34 @@ const statusLabel = status === "complete" ? copy.statusComplete : copy.statusInP
       </PixelPanel>
     </div>
   </div>
+
+  <!-- Case Study: client requirements → design → implementation → result -->
+  {
+    caseStudy && (
+      <PixelPanel
+        as="section"
+        aria-labelledby="case-study-heading"
+        class="flex flex-col gap-6 p-6 sm:p-7"
+      >
+        <h2 id="case-study-heading" class="h3 text-secondary-700 dark:text-secondary">
+          {copy.caseStudy}
+        </h2>
+        <div class="grid gap-6 md:grid-cols-2">
+          {[
+            { label: copy.requirements, body: caseStudy.requirements },
+            { label: copy.design, body: caseStudy.design },
+            { label: copy.implementation, body: caseStudy.implementation },
+            { label: copy.result, body: caseStudy.result },
+          ].map((block) => (
+            <div class="flex flex-col gap-2">
+              <h3 class="text-info text-xs font-bold tracking-wide uppercase">{block.label}</h3>
+              <p class="text-muted-foreground text-sm leading-relaxed">{block.body}</p>
+            </div>
+          ))}
+        </div>
+      </PixelPanel>
+    )
+  }
 
   <!-- Challenges & Solutions (node 72:257) -->
   <PixelPanel

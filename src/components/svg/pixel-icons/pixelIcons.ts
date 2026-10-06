@@ -84,6 +84,14 @@ export const PIXEL_ICONS = {
     viewBox: "0 0 32 32",
     body: '<path d="M28.945 11.435V12.955H30.475V9.90498H25.905V6.85498H24.375V11.435H28.945Z"/><path d="M28.945 12.9548H27.425V14.4748H28.945V12.9548Z"/><path d="M27.425 14.4749H25.905V16.0049H27.425V14.4749Z"/><path d="M25.905 16.0049H24.375V22.0949H25.905V16.0049Z"/><path d="M24.375 22.095H22.855V25.145H24.375V22.095Z"/><path d="M24.375 5.33496H22.855V6.85496H24.375V5.33496Z"/><path d="M22.855 25.145H21.335V26.665H22.855V25.145Z"/><path d="M22.855 3.81494H21.335V5.33494H22.855V3.81494Z"/><path d="M21.3351 26.6648H19.8051V28.1948H21.3351V26.6648Z"/><path d="M21.335 8.38501H18.285V11.435H21.335V8.38501Z"/><path d="M4.56504 28.1948V26.6648H3.04504V29.7148H19.805V28.1948H4.56504Z"/><path d="M21.335 2.28491H15.235V3.81491H21.335V2.28491Z"/><path d="M15.235 3.81494H13.715V5.33494H15.235V3.81494Z"/><path d="M13.715 5.33496H12.185V6.85496H13.715V5.33496Z"/><path d="M12.185 11.435V6.85498H10.665V9.90498H9.14502V11.435H12.185Z"/><path d="M9.14505 22.0949H10.6651V20.575H7.61505V23.625H9.14505V22.0949Z"/><path d="M9.14505 8.38501H7.61505V9.90501H9.14505V8.38501Z"/><path d="M7.61503 23.625H6.09503V25.145H7.61503V23.625Z"/><path d="M7.61503 19.0449H6.09503V20.5749H7.61503V19.0449Z"/><path d="M7.61503 6.85498H6.09503V8.38498H7.61503V6.85498Z"/><path d="M6.095 25.145H4.565V26.665H6.095V25.145Z"/><path d="M6.095 17.5249H4.565V19.0449H6.095V17.5249Z"/><path d="M6.095 5.33496H4.565V6.85496H6.095V5.33496Z"/><path d="M4.56504 16.0049H3.04504V17.5249H4.56504V16.0049Z"/><path d="M3.04502 5.33494H4.56502V3.81494H1.52502V16.0049H3.04502V5.33494Z"/>',
   },
+  database: {
+    viewBox: "0 0 32 32",
+    body: '<rect x="6" y="6" width="20" height="4"/><rect x="6" y="22" width="20" height="4"/><rect x="6" y="6" width="4" height="20"/><rect x="22" y="6" width="4" height="20"/><rect x="6" y="14" width="20" height="3"/>',
+  },
+  wifi: {
+    viewBox: "0 0 32 32",
+    body: '<rect x="14" y="24" width="4" height="4"/><rect x="11" y="19" width="10" height="3"/><rect x="8" y="14" width="16" height="3"/><rect x="5" y="9" width="22" height="3"/>',
+  },
   instagram: {
     viewBox: "0 0 32 32",
     body: '<rect x="7" y="3" width="18" height="3"/><rect x="7" y="26" width="18" height="3"/><rect x="3" y="7" width="3" height="18"/><rect x="26" y="7" width="3" height="18"/><rect x="4" y="4" width="3" height="3"/><rect x="25" y="4" width="3" height="3"/><rect x="4" y="25" width="3" height="3"/><rect x="25" y="25" width="3" height="3"/><rect x="13" y="9" width="6" height="3"/><rect x="13" y="20" width="6" height="3"/><rect x="9" y="13" width="3" height="6"/><rect x="20" y="13" width="3" height="6"/><rect x="11" y="11" width="3" height="3"/><rect x="18" y="11" width="3" height="3"/><rect x="11" y="18" width="3" height="3"/><rect x="18" y="18" width="3" height="3"/><rect x="22" y="6" width="3" height="3"/>',

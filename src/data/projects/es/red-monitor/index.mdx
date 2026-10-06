@@ -23,6 +23,11 @@ features:
     text: "Descripción, nombre, tipo, estado de operación y dirección MAC formateada."
   - lead: "Direcciones IP"
     text: "Lee las direcciones IPv4 e IPv6 (UnicastAddresses) de cada interfaz."
+caseStudy:
+  requirements: "Listar de forma clara y legible las interfaces de red del equipo —estado, dirección MAC y direcciones IP— para apoyar el diagnóstico de conectividad."
+  design: "Aplicación de consola en .NET 8 con C#, apoyada en la API System.Net.NetworkInformation para recorrer los adaptadores y sus propiedades."
+  implementation: "Enumeración de las interfaces con NetworkInterface.GetAllNetworkInterfaces, formateo de la MAC, lectura de direcciones IPv4/IPv6 y manejo de excepciones (NetworkInformationException)."
+  result: "Un listado estable y legible, con el estado resaltado por color, útil como herramienta base de diagnóstico de red."
 archCaption: "[Listado de red]"
 challenge:
   title: "Reto: datos de red inconsistentes"

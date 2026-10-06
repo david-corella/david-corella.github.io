@@ -62,6 +62,16 @@ const projectsCollection = defineCollection({
       links: z.array(z.object({ label: z.string(), href: z.string() })).optional(),
       specs: z.array(z.object({ label: z.string(), value: z.string() })), // SYS_SPECS rows
       features: z.array(z.object({ lead: z.string(), text: z.string() })), // SYSTEM FEATURES list
+      // Structured write-up rendered as a "Case study": client requirements, how the solution was
+      // designed, how it was implemented, and the result. Localized per entry.
+      caseStudy: z
+        .object({
+          requirements: z.string(),
+          design: z.string(),
+          implementation: z.string(),
+          result: z.string(),
+        })
+        .optional(),
       archCaption: z.string(), // ARC_MAP caption, e.g. "[Packet Switching Engine]"
       challenge: z.object({ title: z.string(), body: z.string() }),
       solution: z.object({ title: z.string(), body: z.string() }),

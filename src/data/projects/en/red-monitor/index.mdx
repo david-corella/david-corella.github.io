@@ -23,6 +23,11 @@ features:
     text: "Description, name, type, operational status, and formatted MAC address."
   - lead: "IP addresses"
     text: "Reads each interface's IPv4 and IPv6 addresses (UnicastAddresses)."
+caseStudy:
+  requirements: "List the machine's network interfaces clearly and readably —status, MAC address, and IP addresses— to support connectivity diagnostics."
+  design: "A .NET 8 C# console application built on the System.Net.NetworkInformation API to walk the adapters and their properties."
+  implementation: "Enumerating interfaces with NetworkInterface.GetAllNetworkInterfaces, formatting the MAC, reading IPv4/IPv6 addresses, and handling exceptions (NetworkInformationException)."
+  result: "A stable, readable listing with colour-coded status, useful as a base network-diagnostics tool."
 archCaption: "[Network listing]"
 challenge:
   title: "Challenge: inconsistent network data"

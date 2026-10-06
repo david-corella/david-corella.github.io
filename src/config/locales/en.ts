@@ -9,19 +9,19 @@ import type {
 
 export const siteData: SiteDataProps = {
   name: "davidcorella.dev",
-  title: "David Corella — Full-Stack Software Engineer",
+  title: "David Antonio López Corella — Data & Software Engineering",
   description:
-    "Portfolio of David Corella, full-stack software engineer: academic and personal projects, experience, and notes on web development, backend, networks, and data.",
+    "Portfolio of David Antonio López Corella, Information Systems Engineering student (UNISON): data, networking, servers, and software projects.",
 
   author: {
-    name: "David Corella",
+    name: "David Antonio López Corella",
     email: "davidcorella537@gmail.com",
     twitter: "",
   },
 
   defaultImage: {
     src: "/og.jpg",
-    alt: "David Corella — Full-Stack Software Engineer",
+    alt: "David Antonio López Corella — Data & Software Engineering",
   },
 
   sameAs: [
@@ -34,19 +34,19 @@ export const siteData: SiteDataProps = {
 export const portfolioData: PortfolioDataProps = {
   profile: {
     tagline: "Profile 01",
-    heading: "Full-Stack Software Engineer",
-    role: "Backend",
+    heading: "Data Engineering & Data Science",
+    role: "Data",
     years: "1+",
     bio: [
-      "Experience across the full application lifecycle, from interface design to server architecture.",
-      "Passionate about best practices, accessibility, and continuously learning new technologies.",
-      "Comfortable working with agile methodologies, collaborating closely with teams to turn ideas into high-impact digital products.",
+      "Information Systems Engineering student (University of Sonora) with a professional interest in data engineering and data science.",
+      "Experience with databases, server administration, network design, and software development, from the interface to the server architecture.",
+      "Focused on best practices, accessibility, and continuous learning, working with agile methodologies and team collaboration.",
     ],
     shortBio:
-      "Software developer focused on building modern, optimized, user-centered web applications. Always ready to solve complex technical problems with clean code.",
+      "19-year-old Information Systems Engineering student, passionate about technology and innovation. I work with databases, server administration, network design, and software development, with a focus on data engineering and data science.",
     meta: {
       location: "Hermosillo, Sonora, MX (remote)",
-      role: "Full-Stack Eng.",
+      role: "Data Eng.",
       favorite: "8-Bit Chiptunes",
     },
     skills: [
@@ -61,7 +61,7 @@ export const portfolioData: PortfolioDataProps = {
 
   stats: {
     home: ["Projects: 7", "Years: 1+", "Coffees: ∞"],
-    profile: ["Role: Backend", "Level: 1+", "Projects: 7", "Stack: Full-Stack"],
+    profile: ["Role: Data", "Level: 1+", "Projects: 7", "Focus: Data"],
   },
 
   contact: {

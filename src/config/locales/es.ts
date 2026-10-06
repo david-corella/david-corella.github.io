@@ -9,19 +9,19 @@ import type {
 
 export const siteData: SiteDataProps = {
   name: "davidcorella.dev",
-  title: "David Corella — Ingeniero de Software Full-Stack",
+  title: "David Antonio López Corella — Ingeniería de Datos y Software",
   description:
-    "Portafolio de David Corella, ingeniero de software full-stack: proyectos académicos y personales, experiencia y notas sobre desarrollo web, backend, redes y datos.",
+    "Portafolio de David Antonio López Corella, estudiante de Ingeniería en Sistemas de Información (UNISON): proyectos de datos, redes, servidores y desarrollo de software.",
 
   author: {
-    name: "David Corella",
+    name: "David Antonio López Corella",
     email: "davidcorella537@gmail.com",
     twitter: "",
   },
 
   defaultImage: {
     src: "/og.jpg",
-    alt: "David Corella — Ingeniero de Software Full-Stack",
+    alt: "David Antonio López Corella — Ingeniería de Datos y Software",
   },
 
   sameAs: [
@@ -34,19 +34,19 @@ export const siteData: SiteDataProps = {
 export const portfolioData: PortfolioDataProps = {
   profile: {
     tagline: "Perfil 01",
-    heading: "Ingeniero de Software Full-Stack",
-    role: "Backend",
+    heading: "Ingeniería de Datos y Ciencia de Datos",
+    role: "Datos",
     years: "1+",
     bio: [
-      "Experiencia en el ciclo completo de desarrollo de aplicaciones, desde el diseño de la interfaz hasta la arquitectura del servidor.",
-      "Apasionado por las buenas prácticas, la accesibilidad y el aprendizaje continuo de nuevas tecnologías.",
-      "Acostumbrado a trabajar mediante metodologías ágiles, colaborando estrechamente con equipos para transformar ideas en productos digitales de alto impacto.",
+      "Estudiante de Ingeniería en Sistemas de Información (Universidad de Sonora) con interés profesional en la ingeniería y la ciencia de datos.",
+      "Experiencia en bases de datos, administración de servidores, diseño de redes y desarrollo de software, desde la interfaz hasta la arquitectura del servidor.",
+      "Orientado a las buenas prácticas, la accesibilidad y el aprendizaje continuo, con trabajo en metodologías ágiles y colaboración en equipo.",
     ],
     shortBio:
-      "Desarrollador de software enfocado en crear aplicaciones web modernas, optimizadas y centradas en el usuario. Siempre dispuesto a resolver problemas técnicos complejos con código limpio.",
+      "Estudiante de Ingeniería en Sistemas de Información de 19 años, apasionado por la tecnología y la innovación. Trabajo con bases de datos, administración de servidores, diseño de redes y desarrollo de software, con orientación hacia la ingeniería y la ciencia de datos.",
     meta: {
       location: "Hermosillo, Sonora, MX (remoto)",
-      role: "Ing. Full-Stack",
+      role: "Ing. de Datos",
       favorite: "Chiptunes 8-bit",
     },
     skills: [
@@ -61,7 +61,7 @@ export const portfolioData: PortfolioDataProps = {
 
   stats: {
     home: ["Proyectos: 7", "Años: 1+", "Cafés: ∞"],
-    profile: ["Rol: Backend", "Nivel: 1+", "Proyectos: 7", "Stack: Full-Stack"],
+    profile: ["Rol: Datos", "Nivel: 1+", "Proyectos: 7", "Enfoque: Datos"],
   },
 
   contact: {
