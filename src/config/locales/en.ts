@@ -64,13 +64,6 @@ export const portfolioData: PortfolioDataProps = {
     profile: ["Role: Backend", "Level: 1+", "Projects: 7", "Stack: Full-Stack"],
   },
 
-  home: {
-    tagline: "Player 1",
-    heading: "Welcome, Player One",
-    intro:
-      "Level up with my projects, experiments, and notes on web development, backend, networks, and data analysis. Press Start to begin.",
-  },
-
   contact: {
     prompt: "Want to talk about a project, a collaboration, or just share a favorite game?",
   },

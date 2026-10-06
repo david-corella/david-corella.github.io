@@ -64,13 +64,6 @@ export const portfolioData: PortfolioDataProps = {
     profile: ["Rol: Backend", "Nivel: 1+", "Proyectos: 7", "Stack: Full-Stack"],
   },
 
-  home: {
-    tagline: "Jugador 1",
-    heading: "Bienvenido, Jugador Uno",
-    intro:
-      "Sube de nivel con mis proyectos, experimentos y apuntes sobre desarrollo web, backend, redes y análisis de datos. Pulsa Start para empezar.",
-  },
-
   contact: {
     prompt:
       "¿Quieres hablar de un proyecto, una colaboración o simplemente compartir tu juego favorito?",
