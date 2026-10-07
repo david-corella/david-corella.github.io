@@ -1,10 +1,9 @@
 # davidcorella.dev
 
-Portfolio personal de **David Corella** — Ingeniero de Software Full-Stack. Tema retro 8-bit
-(pixel-art) construido sobre **Astro 7 + Tailwind CSS v4 + TypeScript (strict)**, totalmente
+Portfolio personal de **David Lopez Corella** — Ingeniero en sistemas. Construido sobre **Astro 7 + Tailwind CSS v4 + TypeScript (strict)**, totalmente
 **estático** y **bilingüe (español / inglés)**.
 
-**[Sitio en vivo → davidcorella.dev](https://davidcorella.dev/)**
+**Creditos de Template a AstroCraftThemes https://astro.build/themes/author/3263**
 
 ## Quick start
 
